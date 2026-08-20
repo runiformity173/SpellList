@@ -22,10 +22,14 @@ body {
 * {
   box-sizing: border-box;
 }
-.spell-display h1 {
+.spell-display h3 {
   margin-top: 0;
   font-family: "MrEaves";
   color: #58180D;
+  margin-bottom: 0;
+  + p {
+    margin-bottom: 0.5rem;
+  }
 }
 .spell-display strong {
   letter-spacing: -0.02em;

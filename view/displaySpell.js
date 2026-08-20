@@ -225,7 +225,7 @@ function getSpellHTML(spell) {
     const school = schoolDict[spell.school];
     const levelAndSchool = spell.level == 0 ? school + " Cantrip" : `Level ${spell.level} ${school}`;
     return `
-    <h1>${spell.name}</h1>
+    <h3>${spell.name}</h3>
     <p><em>${levelAndSchool}</em></p>
     <dl>
         <dt><strong>Casting Time:</strong></dt>
