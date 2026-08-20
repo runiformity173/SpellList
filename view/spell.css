@@ -6,6 +6,7 @@ body {
   background-image: url("images/parchment.png");
   padding: 20px;
   hyphens: auto;
+  line-height: 1.25em;
 }
 #main {
   position: absolute;
@@ -32,7 +33,6 @@ body {
   font-family: "BookInsanityRemake";
   margin-bottom: 0; 
   text-rendering: "optimizeLegibility";
-  line-height: 1.25em;
   + p {
     text-indent: 1em;
     margin-top: 0;
@@ -45,6 +45,10 @@ body {
 .spell-display dl {
   text-wrap-mode: wrap;
   font-family: "ScalySans";
+  br {
+    margin: 2em;
+    display: block;
+  }
 }
 .spell-display dt {
   margin-right: 5px;
