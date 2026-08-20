@@ -1,0 +1,60 @@
+body {
+  background-color: #111111;
+}
+.spell-display {
+  background-color: rgb(238, 229, 206);
+  background-image: url("images/parchment.png");
+  padding: 20px;
+  hyphens: auto;
+}
+#main {
+  position: absolute;
+  overflow-y: scroll;
+  left: 50%;
+  top: 50%;
+  width: 25.5em;
+  max-height: 80vh;
+  transform: translate(-50%, -50%);
+  box-shadow: rgba(0,0,0,0.5) 3px 3px 7px;
+}
+* {
+  box-sizing: border-box;
+}
+.spell-display h1 {
+  margin-top: 0;
+  font-family: "MrEaves";
+  color: #58180D;
+}
+.spell-display strong {
+  letter-spacing: -0.02em;
+}
+.spell-display p {
+  font-family: "BookInsanityRemake";
+  margin-bottom: 0; 
+  text-rendering: "optimizeLegibility";
+  line-height: 1.25em;
+  + p {
+    text-indent: 1em;
+    margin-top: 0;
+  }
+}
+.spell-display .tableName {
+  font-family: "ScalySans";
+  font-variant-caps: small-caps;
+}
+.spell-display dl {
+  text-wrap-mode: wrap;
+  font-family: "ScalySans";
+}
+.spell-display dt {
+  margin-right: 5px;
+}
+.spell-display dt, .spell-display dd {
+  display: inline;
+}
+.spell-display dd {
+  margin-left: -0.3em;
+  white-space: pre-wrap;
+}
+
+

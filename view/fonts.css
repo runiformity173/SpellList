@@ -1,0 +1,78 @@
+@font-face {
+  font-family: 'BookInsanityRemake';
+  src: url('fonts/Bookinsanity.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'BookInsanityRemake';
+  src: url('fonts/BookinsanityI.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'BookInsanityRemake';
+  src: url('fonts/BookinsanityB.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'BookInsanityRemake';
+  src: url('fonts/BookinsanityBI.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'MrEaves';
+  src: url('fonts/MrEavesSC.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ScalySans';
+  src: url('fonts/ScalySans.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ScalySans';
+  src: url('fonts/ScalySansI.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'ScalySans';
+  src: url('fonts/ScalySansB.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ScalySans';
+  src: url('fonts/ScalySansBI.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'ZatannaMisdirection';
+  src: url('fonts/ZatannaMisdirection.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ZatannaMisdirection';
+  src: url('fonts/ZatannaMisdirectionI.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'ZatannaMisdirection';
+  src: url('fonts/ZatannaMisdirectionB.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ZatannaMisdirection';
+  src: url('fonts/ZatannaMisdirectionBI.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
