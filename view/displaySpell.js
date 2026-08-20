@@ -1,6 +1,6 @@
 // turn spells to dict to search quicker?
 
-// TODO: higher level spell slot
+// TODO: table styling
 const schoolDict = {
     "A": "Abjuration",
     "C": "Conjuration",
@@ -220,7 +220,7 @@ function getSpellHTML(spell) {
     let body = "";
     for (const entry of spell.entries.concat(spell.entriesHigherLevel || [])) {
         const parsedEntry = parseEntry(entry);
-        body += `<p>${parsedEntry}</p>`
+        body += entry?.type == "table" ? parsedEntry : `<p>${parsedEntry}</p>`;
     }
     const school = schoolDict[spell.school];
     const levelAndSchool = spell.level == 0 ? school + " Cantrip" : `Level ${spell.level} ${school}`;

@@ -36,6 +36,7 @@ body {
 }
 .spell-display p {
   margin-bottom: 0; 
+  margin-top: 1em;
   text-rendering: "optimizeLegibility";
   + p {
     text-indent: 1em;
@@ -45,6 +46,7 @@ body {
 .spell-display .tableName {
   font-family: "ScalySans";
   font-variant-caps: small-caps;
+  font-size: 125%;
 }
 .spell-display dl {
   text-wrap-mode: wrap;
@@ -64,5 +66,14 @@ body {
   margin-left: -0.3em;
   white-space: pre-wrap;
 }
-
-
+.spell-display > table {
+  margin-top: 1em;
+}
+table table tbody tr {
+  &:nth-child(odd) {
+    background-color: rgb(218, 209, 186);
+  }
+  &:nth-child(even) {
+    background-color: rgb(248, 239, 216);
+  }
+}
