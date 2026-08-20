@@ -7,6 +7,7 @@ body {
   padding: 20px;
   hyphens: auto;
   line-height: 1.25em;
+  font-family: "BookInsanityRemake";
 }
 #main {
   position: absolute;
@@ -30,7 +31,6 @@ body {
   letter-spacing: -0.02em;
 }
 .spell-display p {
-  font-family: "BookInsanityRemake";
   margin-bottom: 0; 
   text-rendering: "optimizeLegibility";
   + p {
