@@ -1,9 +1,9 @@
 body {
   background-color: #111111;
-}
-.spell-display {
   background-color: rgb(238, 229, 206);
   background-image: url("images/parchment.png");
+}
+.spell-display {
   padding: 20px;
   hyphens: auto;
   line-height: 1.25em;
@@ -14,8 +14,8 @@ body {
   overflow-y: scroll;
   left: 50%;
   top: 50%;
-  width: 25.5em;
-  max-height: 80vh;
+  width: min(25.5em,100vw);
+  max-height: max(80vh, min(100vh, 600px));
   transform: translate(-50%, -50%);
   box-shadow: rgba(0,0,0,0.5) 3px 3px 7px;
 }
