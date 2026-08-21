@@ -1,6 +1,6 @@
 // turn spells to dict to search quicker?
 
-// TODO: table styling
+// TODO: list-hang-notitle styling? For example, Wish
 const schoolDict = {
     "A": "Abjuration",
     "C": "Conjuration",
@@ -11,47 +11,62 @@ const schoolDict = {
     "N": "Necromancy",
     "T": "Transmutation",
 }
+var stringDistance=function(a,b){var c,d,e,f,g,h,k,l,m,n=a.length,o=b.length,p={insert:function(){return 0.1},delete:function(){return 1},replace:function(){return 1}};if(0==n||0==o){for(e=0;n;)e+=p.delete(a[--n]);for(;o;)e+=p.insert(b[--o]);return e}for(m=[],m[0]=0,d=1;d<=o;++d)m[d]=m[d-1]+p.insert(b[d-1]);for(c=1;c<=n;++c)for(k=m[0],m[0]+=p.delete(a[c-1]),d=1;d<=o;++d)l=m[d],a[c-1]==b[d-1]?m[d]=k:(f=m[d-1]+p.insert(b[d-1]),g=m[d]+p.delete(a[c-1]),h=k+p.replace(a[c-1],b[d-1]),m[d]=f<g?f:g<h?g:h),k=l;return e=m[o],e};
 function getSpellByName(name) {
-  const spellName = name.split("--")[0].toLowerCase().replaceAll("-"," ");
-  const spellSource = (name.split("--")[1] || "XPHB").toLowerCase();
-  for (const spell of spells) {
-    if (spell.name.toLowerCase() == spellName && spellSource == spell.source.toLowerCase()) {
-      return spell;
+    const spellName = name.split("--")[0].toLowerCase().replaceAll("-"," ");
+    if (name.includes("--")) {
+        const spellSource = name.split("--")[1].toLowerCase();
+        for (const spell of spells) {
+            if (spell.name.toLowerCase() == spellName && spellSource == spell.source.toLowerCase()) {
+                return spell;
+            }
+        }
+        console.log("no spell found with name",name)
+        console.log("parsed name \"" + spellName + "\" and source \"" + spellSource + "\"")
+    } else {
+        let best;
+        let bestDist = Infinity;
+        for (const spell of spells) {
+            if (spell.reprintedAs) continue;
+            let dist = stringDistance(spellName, spell.name.toLowerCase())
+            if (dist < bestDist) {
+                bestDist = dist;
+                best = spell;
+            }
+        }
+        return best;
     }
-  }
-  console.log("no spell found with name",name)
-  console.log("parsed name \"" + spellName + "\" and source \"" + spellSource + "\"")
 }
 function spellToHash(spell) {
     return spell.name.toLowerCase().replaceAll(" ","-") + "--" + spell.source;
 }
 function parseStrings(str) {
-  if (!str) return "";
-  if (typeof str === 'string' || str instanceof String) {
-    const regex = /\{@[^\s]+\s+([^|}]+)\s*\|?[^}]*\}/g;
-    return str.replace(regex, function(match, item){
-      let final = item.trim();
-      if (match.includes("@creature")) {
-        final = `<a class='rollLink' href='https://runiformity173.github.io/dnd/MonsterSearch/display/#${final.replaceAll(' ','-')}' target='_blank'>${final}</a>`
-      } else if (match.includes("@spell")) {
-        final = `<a class='rollLink' href='https://runiformity173.github.io/SpellList/view/#${final.replaceAll(' ','-')}' target='_blank'>${final}</a>`
-      } else if (match.includes("@i ")) {
-        final = `<i>${final}</i>`;
-      } else {
-        const splat = match.split("|");
-        if (splat.length == 3) {
-          final = splat[splat.length-1].replace(/[{}]/g,"").trim();
-        }
-      }
-      return final;
-    });
-  } else if (typeof str === 'object' && !Array.isArray(str) && str !== null) {
-    return str?.roll?.exact || parseStrings(str?.entry) || "";
-  }
-  return str;
+    if (!str) return "";
+    if (typeof str === 'string' || str instanceof String) {
+        const regex = /\{@[^\s]+\s+([^|}]+)\s*\|?[^}]*\}/g;
+        return str.replace(regex, function(match, item){
+            let final = item.trim();
+            if (match.includes("@creature")) {
+                final = `<a class='rollLink' href='https://runiformity173.github.io/dnd/MonsterSearch/display/#${final.replaceAll(' ','-')}' target='_blank'>${final}</a>`
+            } else if (match.includes("@spell")) {
+                final = `<a class='rollLink' href='https://runiformity173.github.io/SpellList/view/#${final.replaceAll(' ','-')}' target='_blank'>${final}</a>`
+            } else if (match.includes("@i ")) {
+                final = `<i>${final}</i>`;
+            } else {
+                const splat = match.split("|");
+                if (splat.length == 3) {
+                    final = splat[splat.length-1].replace(/[{}]/g,"").trim();
+                }
+            }
+            return final;
+        });
+    } else if (typeof str === 'object' && !Array.isArray(str) && str !== null) {
+        return str?.roll?.exact || parseStrings(str?.entry) || "";
+    }
+    return str;
 }
 function isDice(str) {
-  return /^\d*d\d+(\s?\+\s?\d*d\d+)*$/.test(str);
+    return /^\d*d\d+(\s?\+\s?\d*d\d+)*$/.test(str);
 }
 function loadTable(table) {
     const el = document.createElement("table");
@@ -196,7 +211,7 @@ function parseEntry(entry) {
     if (entry?.name) {
         final += `<strong><em>${entry.name}.</em></strong> `;
     }
-    if (entry?.type == "entries") {
+    if (entry?.type == "entries" || entry?.type == "item") {
         for (const subEntry of entry.entries) {
             final += parseEntry(subEntry);
         }
