@@ -11,22 +11,19 @@ const schoolDict = {
     "N": "Necromancy",
     "T": "Transmutation",
 }
-var stringDistance=function(a,b){var c,d,e,f,g,h,k,l,m,n=a.length,o=b.length,p={insert:function(){return 0.1},delete:function(){return 1},replace:function(){return 1}};if(0==n||0==o){for(e=0;n;)e+=p.delete(a[--n]);for(;o;)e+=p.insert(b[--o]);return e}for(m=[],m[0]=0,d=1;d<=o;++d)m[d]=m[d-1]+p.insert(b[d-1]);for(c=1;c<=n;++c)for(k=m[0],m[0]+=p.delete(a[c-1]),d=1;d<=o;++d)l=m[d],a[c-1]==b[d-1]?m[d]=k:(f=m[d-1]+p.insert(b[d-1]),g=m[d]+p.delete(a[c-1]),h=k+p.replace(a[c-1],b[d-1]),m[d]=f<g?f:g<h?g:h),k=l;return e=m[o],e};
 function getSpellByName(name) {
-  let minDist = Infinity;
-  let selected;
+  const spellName = name.split("--")[0].toLowerCase().replaceAll("-"," ");
+  const spellSource = (name.split("--")[1] || "XPHB").toLowerCase();
   for (const spell of spells) {
-    if (spell.name.toLowerCase() == (name.toLowerCase())) {
+    if (spell.name.toLowerCase() == spellName && spellSource == spell.source.toLowerCase()) {
       return spell;
     }
-    let dist = stringDistance(name.toLowerCase(),spell.name.toLowerCase());
-    if (spell.name.toLowerCase().startsWith(name.toLowerCase())) dist -= 100;
-    if (dist < minDist) {
-      minDist = dist;
-      selected = spell;
-    }
   }
-  return selected;
+  console.log("no spell found with name",name)
+  console.log("parsed name \"" + spellName + "\" and source \"" + spellSource + "\"")
+}
+function spellToHash(spell) {
+    return spell.name.toLowerCase().replaceAll(" ","-") + "--" + spell.source;
 }
 function parseStrings(str) {
   if (!str) return "";
@@ -225,6 +222,7 @@ function getSpellHTML(spell) {
     const school = schoolDict[spell.school];
     const levelAndSchool = spell.level == 0 ? school + " Cantrip" : `Level ${spell.level} ${school}`;
     return `
+    <div class="spell-source" title="${sourceDict[spell.source]}"><h3>${spell.source}</h3></div>
     <h3>${spell.name}</h3>
     <p><em>${levelAndSchool}</em></p>
     <dl>
@@ -241,7 +239,7 @@ function getSpellHTML(spell) {
     `;
 }
 function loadSpellHTML() {
-    const spellName = decodeURIComponent(location.hash.slice(1)).replaceAll(/[\s\-]/g," ");
+    const spellName = decodeURIComponent(location.hash.slice(1)).replaceAll(" ","-");
     const spell = getSpellByName(spellName);
     console.log(spell);
     document.querySelector("#main .spell-display").innerHTML = getSpellHTML(spell);
@@ -252,7 +250,7 @@ window.addEventListener("hashchange",loadSpellHTML)
 for (const spell of spells) {
     try {
         const res = getSpellHTML(spell);
-        if (res.includes("undefined")) console.log(spell.name);
+        if (res.includes("undefined")) console.log(spell.name, spellToHash(spell));
     } catch (e) {
         console.log(spell.name);
         console.log(e);
