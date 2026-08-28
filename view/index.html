@@ -10,6 +10,12 @@
   <link href="spell.css" rel="stylesheet" type="text/css" />
   <link href="fonts.css" rel="stylesheet" type="text/css" />
   <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <style>
+    body {
+      background-color: rgb(238, 229, 206);
+      background-image: url("images/parchment.png");
+    }
+  </style>
 </head>
 
 <body>
@@ -20,5 +26,9 @@
   </div>
   <script src="../data.js"></script>
   <script src="displaySpell.js"></script>
+  <script>
+    loadSpellHTML();
+    window.addEventListener("hashchange",loadSpellHTML);
+  </script>
 </body>
 </html>

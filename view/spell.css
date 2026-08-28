@@ -1,7 +1,6 @@
-body {
-  background-color: #111111;
-  background-color: rgb(238, 229, 206);
-  background-image: url("images/parchment.png");
+html, body {
+  height: 100%;
+  width: 100%;
 }
 .spell-display {
   padding: 20px;
@@ -43,21 +42,17 @@ body {
     margin-top: 0;
   }
 }
-.spell-display table + p {
+.spell-display .table-container + p {
   text-indent: 1em;
 }
 .spell-display .tableName {
-  font-family: "ScalySans";
   font-variant-caps: small-caps;
   font-size: 125%;
+  font-weight: bold;
 }
 .spell-display dl {
   text-wrap-mode: wrap;
   font-family: "ScalySans";
-  br {
-    margin: 2em;
-    display: block;
-  }
 }
 .spell-display dt {
   margin-right: 5px;
@@ -69,10 +64,13 @@ body {
   margin-left: -0.3em;
   white-space: pre-wrap;
 }
-.spell-display > table {
+.spell-display > .table-container {
   margin-top: 1em;
 }
-.spell-display table table tbody tr {
+.spell-display .table-container {
+  font-family: "ScalySans";
+}
+.spell-display table tbody tr {
   &:nth-child(odd) {
     background-color: rgb(218, 209, 186);
   }

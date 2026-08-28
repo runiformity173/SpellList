@@ -1,0 +1,79 @@
+:root {
+    --bs-dark: #171717;
+    --bs-dark-rgb: 28,28,28;
+    --bs-border-radius: 0;
+}
+.btn {
+    --bs-btn-border-radius: 0;
+}
+body {
+    background-color: #111111;
+}
+.col-lg-8 {
+    font-size: 75%;
+}
+/* .card-body {
+    background-color: #131313;
+} */
+.card #spellOutput{
+    filter: invert() hue-rotate(180deg);
+
+}
+.spell-item {
+    cursor: pointer;
+    &:hover {
+        filter: brightness(1.5);
+        transform-origin: center center;
+        .row {
+            transform: translateX(1em);
+        }
+    }
+    .row {
+        transition: transform 0.05s linear;
+    }
+}
+.input-group {
+    & input, & input::placeholder {
+        color: rgba(var(--bs-light-rgb), var(--bs-text-opacity)) !important;
+        opacity: 1;
+    }
+    > * {
+        border-radius: 0 !important;
+    }
+}
+
+#spellListHeaders {
+    /* position: absolute;
+    top:0; */
+    width: 100%;
+    z-index: 2;
+    flex: 0;
+    height: auto;
+    border-bottom: rgba(var(--bs-secondary-rgb), var(--bs-text-opacity)) 1px solid;
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
+    .row {
+        height: 3em;
+        padding: 0.5em 1em;
+        margin: 0;
+        div {
+            margin-top: 0;
+        }
+    }
+}
+#spellOptions {
+    min-height: 0;
+    flex: 1;
+}
+#spellListContainer {
+    
+}
+#spellListContainer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0px -5px 5px rgba(0,0,0,0.4) inset;
+  pointer-events: none; 
+}

@@ -40,18 +40,30 @@ function getSpellByName(name) {
 function spellToHash(spell) {
     return spell.name.toLowerCase().replaceAll(" ","-") + "--" + spell.source;
 }
+const foundTags = new Set();
+let currentSpell = "";
 function parseStrings(str) {
     if (!str) return "";
     if (typeof str === 'string' || str instanceof String) {
+        if (str === "{@note Additional {@filter animal form choices|bestiary|Miscellaneous=Familiar} may be available at the DM's discretion.}") return "<em>Additional animal form choices may be available at the DM's discretion.</em>";
         const regex = /\{@[^\s]+\s+([^|}]+)\s*\|?[^}]*\}/g;
         return str.replace(regex, function(match, item){
             let final = item.trim();
+            foundTags.add(match.split(" ")[0].slice(2));
             if (match.includes("@creature")) {
-                final = `<a class='rollLink' href='https://runiformity173.github.io/dnd/MonsterSearch/display/#${final.replaceAll(' ','-')}' target='_blank'>${final}</a>`
+                final = `<a href='https://runiformity173.github.io/dnd/MonsterSearch/display/#${final.replaceAll(' ','-')}' target='_blank'>${final}</a>`
             } else if (match.includes("@spell")) {
-                final = `<a class='rollLink' href='https://runiformity173.github.io/SpellList/view/#${final.replaceAll(' ','-')}' target='_blank'>${final}</a>`
+                final = `<a href='https://runiformity173.github.io/SpellList/view/#${final.replaceAll(' ','-')}' target='_blank'>${final}</a>`
             } else if (match.includes("@i ")) {
                 final = `<i>${final}</i>`;
+            } else if (match.includes("@b ")) {
+                final = `<b>${final}</b>`;
+            } else if (match.includes("@dc ")) {
+                final = `DC ${final}`;
+            } else if (match.includes("@d20 ")) {
+                final = (Number(final) >= 0 ? "+" : "") + final;
+            } else if (match.includes("@chance ")) {
+                final = final + "%";
             } else {
                 const splat = match.split("|");
                 if (splat.length == 3) {
@@ -69,24 +81,18 @@ function isDice(str) {
     return /^\d*d\d+(\s?\+\s?\d*d\d+)*$/.test(str);
 }
 function loadTable(table) {
-    const el = document.createElement("table");
+    const el = document.createElement("div");
     el.innerHTML = `
-    <tr>
-        <th class="tableName" colspan="6"></th>
-        <tr>
-            <td colspan="6">
-                <table>
-                <thead>
-                    <tr class="tableLabels">
-                    
-                    </tr>
-                </thead>
-                <tbody class="tableBody">
-                </tbody>
-                </table>
-            </td>
-        </tr>
-    </tr>`;
+        <h5 class="tableName"></h5>
+        <table>
+            <thead>
+                <tr class="tableLabels"></tr>
+            </thead>
+            <tbody class="tableBody">
+            </tbody>
+        </table>
+    `;
+    el.classList.add("table-container");
     if (table.caption) {
         el.querySelector(`.tableName`).innerHTML = table.caption;
     } else {
@@ -242,13 +248,13 @@ function getSpellHTML(spell) {
     <p><em>${levelAndSchool}</em></p>
     <dl>
         <dt><strong>Casting Time:</strong></dt>
-        <dd>${parseTime(spell.time,spell.meta?.ritual)}</dd><br>
+        <dd>${parseTime(spell.time,spell.meta?.ritual)}<br></dd>
         <dt><strong>Range:</strong></dt>
-        <dd>${parseRange(spell.range)}</dd><br>
+        <dd>${parseRange(spell.range)}<br></dd>
         <dt><strong>Components:</strong></dt>
-        <dd>${parseComponents(spell.components)}</dd><br>
+        <dd>${parseComponents(spell.components)}<br></dd>
         <dt><strong>Duration:</strong></dt>
-        <dd>${parseDuration(spell.duration)}</dd><br>
+        <dd>${parseDuration(spell.duration)}<br></dd>
     </dl>
     ${body}
     `;
@@ -256,18 +262,5 @@ function getSpellHTML(spell) {
 function loadSpellHTML() {
     const spellName = decodeURIComponent(location.hash.slice(1)).replaceAll(" ","-");
     const spell = getSpellByName(spellName);
-    console.log(spell);
     document.querySelector("#main .spell-display").innerHTML = getSpellHTML(spell);
-}
-loadSpellHTML();
-window.addEventListener("hashchange",loadSpellHTML)
-
-for (const spell of spells) {
-    try {
-        const res = getSpellHTML(spell);
-        if (res.includes("undefined")) console.log(spell.name, spellToHash(spell));
-    } catch (e) {
-        console.log(spell.name);
-        console.log(e);
-    }
 }
