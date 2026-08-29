@@ -126,13 +126,13 @@ function loadTable(table) {
                 const text = table.rows[j][i];
                 if (!text) break;
                 if (text?.width) {
-                    finalBody += `<td colspan="${table.colStyles.length}">${parseStrings(text)}</td>`;
+                    finalBody += `<td colspan="${table.colStyles.length}">${text}</td>`;
                     break;
                 }
-                finalBody += `<td class="${table.colStyles[i]}">${parseStrings(text)}</td>`;
+                finalBody += `<td class="${table.colStyles[i]}">${text}</td>`;
                 break;
                 case "row-indent-first":
-                finalBody += `<td class="${table.colStyles[i]}">${i==0?INDENT:""}${parseStrings(table.rows[j].row[i])}</td>`;
+                finalBody += `<td class="${table.colStyles[i]}">${i==0?INDENT:""}${table.rows[j].row[i]}</td>`;
                 break;
                 default:
                 alert("defaulting on row style, very bad");
@@ -211,7 +211,7 @@ function parseDuration(durations) {
 }
 function parseEntry(entry) {
     if (typeof entry === "string") {
-        return `${parseStrings(entry)}`;
+        return entry;
     }
     let final = "";
     if (entry?.name) {
@@ -242,7 +242,7 @@ function getSpellHTML(spell) {
     }
     const school = schoolDict[spell.school];
     const levelAndSchool = spell.level == 0 ? school + " Cantrip" : `Level ${spell.level} ${school}`;
-    return `
+    return parseStrings(`
     <div class="spell-source" title="${sourceDict[spell.source]}"><h3>${spell.source}</h3></div>
     <h3>${spell.name}</h3>
     <p><em>${levelAndSchool}</em></p>
@@ -257,7 +257,7 @@ function getSpellHTML(spell) {
         <dd>${parseDuration(spell.duration)}<br></dd>
     </dl>
     ${body}
-    `;
+    `);
 }
 function loadSpellHTML() {
     const spellName = decodeURIComponent(location.hash.slice(1)).replaceAll(" ","-");
