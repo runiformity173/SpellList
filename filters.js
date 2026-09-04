@@ -41,11 +41,26 @@ const filterOptions = [
             "T":"Transmutation",
         }
     },
+    {
+        name: "Class",
+        options: {
+            "Artificer":"Artificer",
+            "Bard":"Bard",
+            "Cleric":"Cleric",
+            "Druid":"Druid",
+            "Paladin":"Paladin",
+            "Ranger":"Ranger",
+            "Sorcerer":"Sorcerer",
+            "Warlock":"Warlock",
+            "Wizard":"Wizard",
+        }
+    },
 ];
 const fieldMap = {
     "Source":"source",
     "Level":"level",
     "School":"school",
+    "Class":"classes",
 };
 const selectedFilters = {};
 for (const i of filterOptions) selectedFilters[i.name] = [];
