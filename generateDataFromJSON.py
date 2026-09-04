@@ -11,20 +11,18 @@ for key in index:
 with open("data/spell-sources.json","r") as fl:
     spellClasses = json.load(fl)
 for spell in spells:
-    srcs = []
+    srcs = set()
     try:
         for cls in spellClasses[spell["source"]][spell["name"]]["classVariant"]:
-            if cls["source"] != "XPHB": continue
-            srcs.append(cls["name"])
+            srcs.add(cls["name"])
     except:
         pass
     try:
         for cls in spellClasses[spell["source"]][spell["name"]]["class"]:
-                if cls["source"] != "XPHB": continue
-                srcs.append(cls["name"])
+            srcs.add(cls["name"])
     except:
         pass
-    spell["classes"] = srcs
+    spell["classes"] = list(srcs)
     
 
 final += "const spells = " + json.dumps(spells) + ";\n"

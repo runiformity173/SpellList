@@ -39,7 +39,8 @@ function matchesFilter(spell, filter) {
         return !matchesFilter(spell, filter.filter);
     }
     if (["IS","NOT"].includes(filter.mode)) {
-        const matches = spell[filter.field] == filter.value || Array.isArray(spell[filter.field]) && spell[filter.field].includes(filter.value);
+        const matches = spell[filter.field] == filter.value || 
+            Array.isArray(spell[filter.field]) && spell[filter.field].includes(filter.value);
         const expected = filter.mode == "IS";
         return matches == expected;
     }
