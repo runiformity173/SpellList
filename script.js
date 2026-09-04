@@ -57,16 +57,8 @@ function filterSpells() {
     }
 }
 function load() {
-    loadSpells({
-        mode: "ALL",
-        filters: [
-            {
-                field: "source",
-                value: "XPHB",
-                mode: "IS",
-            }
-        ]
-    });
+    loadAllKeys();
+    loadSpells(formatFilters(selectedFilters));
     const spellName = decodeURIComponent(location.hash.slice(1)).replaceAll(" ","-");
     const spell = getSpellByName(spellName);
     document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
@@ -77,18 +69,16 @@ function load() {
 
 /* 
 structure of a filter:
-{
-    mode: "ALL | ANY | MAX_ONE | NONE",
-    filters: [
-
-    ]
+type Filter = {
+    mode: "ALL" | "ANY" | "MAX_ONE" | "NONE";
+    filters: Filter[];
 } | {
-    field: "source",
-    value: "",
-    mode: "IS | NOT"
+    field: string;
+    value: string;
+    mode: "IS" | "NOT";
 } | {
-    mode: "NOT",
-    filter: {}
-}
+    mode: "NOT";
+    filter: Filter;
+};
 
 */
