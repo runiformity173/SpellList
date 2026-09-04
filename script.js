@@ -70,6 +70,7 @@ function load() {
     const spellName = decodeURIComponent(location.hash.slice(1)).replaceAll(" ","-");
     const spell = getSpellByName(spellName);
     document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
+    loadFilters();
 }
 
 
