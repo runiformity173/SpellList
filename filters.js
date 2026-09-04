@@ -143,7 +143,7 @@ function loadFilters() {
                         innerPill.classList.add("text-bg-secondary");
                         selectedFilters[filter.name].splice(selectedFilters[filter.name].indexOf("!" + i),1);
                     }
-                    // TODO: save current filters to localstorage here
+                    saveKey("selectedFilters");
                     loadSpells(formatFilters(selectedFilters));
                     filterSpells();
                     loadFilters();

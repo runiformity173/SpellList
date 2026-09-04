@@ -121,3 +121,18 @@ input:focus + #magnifyingGlass {
         margin-right: 0.5em;
     }
 }
+@keyframes emphasis-flash {
+    from {
+        filter: "";
+    }
+    to {
+        filter: brightness(2) sepia(10) hue-rotate(185deg) saturate(2);
+    }
+}
+.emphasize-flash-animation {
+    transition: filter-color 0.2s;
+    animation-name: emphasis-flash;
+    animation-duration: 0.2s;
+    animation-iteration-count: 6;
+    animation-direction: alternate;
+}
