@@ -13,7 +13,6 @@ function loadKey(key) {
 
 function loadAllKeys() {
     const loadedFilters = loadKey("selectedFilters");
-    console.log(loadedFilters)
     if (loadedFilters) {
         for (const key in loadedFilters) {
             selectedFilters[key] = loadedFilters[key];

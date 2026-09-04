@@ -1,12 +1,21 @@
 // "Closest match" spell when results are empty?
-
 let SEARCH_QUERY = "";
+
+function getNameForSpell(spell,concise=true) {
+    const withoutSource = spell.name.replaceAll(" ","-").toLowerCase();
+    if (concise && spell === getSpellByName(withoutSource)) {
+        return withoutSource;
+    }
+    return withoutSource + "--" + spell.source;
+}
+const conciseMapping = {};
 function loadSpells(filters) {
     document.getElementById("spellOptions").innerHTML = "";
     for (const spell of spells) {
         if (!matchesFilter(spell, filters)) continue;
         const el = document.createElement("div");
         el.className = "list-group-item bg-dark text-light spell-item";
+        const spellName = getNameForSpell(spell);
         el.id = spell.name + " " + spell.source;
         el.innerHTML = `
             <div class="row align-items-center g-2">
@@ -17,7 +26,7 @@ function loadSpells(filters) {
             </div>
         `;
         el.addEventListener("click",function () {
-            window.location.replace("#"+spell.name.replaceAll(" ","-").toLowerCase());
+            window.location.replace("#"+spellName);
             document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
         });
         if (!matchesSearch(spell, SEARCH_QUERY)) {el.style.display = "none";}
@@ -30,7 +39,7 @@ function matchesFilter(spell, filter) {
         return !matchesFilter(spell, filter.filter);
     }
     if (["IS","NOT"].includes(filter.mode)) {
-        const matches = spell[filter.field] == filter.value;
+        const matches = spell[filter.field] == filter.value || Array.isArray(spell[filter.field]) && spell[filter.field].includes(filter.value);
         const expected = filter.mode == "IS";
         return matches == expected;
     }
@@ -51,7 +60,7 @@ function matchesSearch(spell, search) {
 }
 function filterSpells() {
     for (const spell of spells) {
-        const el = document.getElementById(spell.name + " " + spell.source);
+        const el = document.getElementById(conciseMapping[getNameForSpell(spell,concise=false)] || "");
         if (!el) continue;
         el.style.display = matchesSearch(spell, SEARCH_QUERY) ? "" : "none";
     }
@@ -59,9 +68,23 @@ function filterSpells() {
 function load() {
     loadAllKeys();
     loadSpells(formatFilters(selectedFilters));
-    const spellName = decodeURIComponent(location.hash.slice(1)).replaceAll(" ","-");
-    const spell = getSpellByName(spellName);
-    document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
+    const spellName = decodeURIComponent(location.hash.slice(1));
+    if (spellName) {
+        const spell = getSpellByName(spellName);
+        document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
+        const target = document.getElementById(spell.name + " " + spell.source);
+        if (target) {
+            let scrollTarget = target;
+            for (let i = 0; i < 2 && scrollTarget.previousElementSibling; i++) {
+                scrollTarget = scrollTarget.previousElementSibling;
+            }
+            scrollTarget.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            target.classList.add("emphasize-flash-animation");
+        }
+    }
     loadFilters();
 }
 
