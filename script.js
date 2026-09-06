@@ -61,7 +61,7 @@ function matchesSearch(spell, search) {
 }
 function filterSpells() {
     for (const spell of spells) {
-        const el = document.getElementById(conciseMapping[getNameForSpell(spell,concise=false)] || "");
+        const el = document.getElementById((spell.name + " " + spell.source) || "");
         if (!el) continue;
         el.style.display = matchesSearch(spell, SEARCH_QUERY) ? "" : "none";
     }
