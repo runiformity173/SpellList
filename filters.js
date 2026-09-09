@@ -3,7 +3,7 @@
 <span class="badge rounded-pill text-bg-light border text-dark">Concentration: No</span>
 */
 
-// condition, saves, attacks, range?, area?
+// saves, attacks, range?, area?
 
 // save and load filters from localstorage
 const filterOptions = [
@@ -135,6 +135,25 @@ const filterOptions = [
             "thunder": "Thunder",
         }
     },
+    {
+        name: "Condition",
+        options: {
+            "blinded": "Blinded",
+            "charmed": "Charmed",
+            "deafened": "Deafened",
+            "frightened": "Frightened",
+            "grappled": "Grappled",
+            "incapacitated": "Incapacitated",
+            "invisible": "Invisible",
+            "paralyzed": "Paralyzed",
+            "petrified": "Petrified",
+            "poisoned": "Poisoned",
+            "prone": "Prone",
+            "restrained": "Restrained",
+            "stunned": "Stunned",
+            "unconscious": "Unconscious",
+        }
+    },
 ];
 const fieldMap = {
     "Source":"source",
@@ -146,6 +165,7 @@ const fieldMap = {
     "Misc":"special",
     "Effects":"miscTags",
     "Damage":"damageInflict",
+    "Condition":"conditionInflict",
 };
 const selectedFilters = {};
 for (const i of filterOptions) selectedFilters[i.name] = [];
