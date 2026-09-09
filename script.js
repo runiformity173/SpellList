@@ -39,8 +39,23 @@ function matchesFilter(spell, filter) {
         return !matchesFilter(spell, filter.filter);
     }
     if (["IS","NOT"].includes(filter.mode)) {
-        const matches = spell[filter.field] == filter.value || 
+        let matches;
+        if (filter.field == "time") {
+            matches = spell[filter.field].map(o=>o.unit).includes(filter.value);
+        } else if (filter.field == "duration") {
+            matches = spell[filter.field].map(o=>(o.type == "timed" ? o.duration.type : o.type)).includes(filter.value);
+        } else if (filter.field == "special") {
+            if (filter.value == "C") matches = spell.duration.map(o=>o.concentration).some(o=>o);
+            if (filter.value == "R") matches = !!spell.meta?.ritual;
+            if (filter.value == "V") matches = !!spell.components?.v;
+            if (filter.value == "S") matches = !!spell.components?.s;
+            if (filter.value == "M") matches = !!spell.components?.m;
+            if (filter.value == "MC") matches = !!spell.components?.m?.cost;
+            if (filter.value == "CM") matches = !!spell.components?.m?.consume;
+        } else {
+            matches = spell[filter.field] == filter.value || 
             Array.isArray(spell[filter.field]) && spell[filter.field].includes(filter.value);
+        }
         const expected = filter.mode == "IS";
         return matches == expected;
     }
