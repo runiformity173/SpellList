@@ -3,7 +3,7 @@
 <span class="badge rounded-pill text-bg-light border text-dark">Concentration: No</span>
 */
 
-// damage type, condition, saves, attacks, range?, area?
+// condition, saves, attacks, range?, area?
 
 // save and load filters from localstorage
 const filterOptions = [
@@ -117,6 +117,24 @@ const filterOptions = [
             "UBA": "Uses Bonus Action",
         }
     },
+    {
+        name: "Damage",
+        options: {
+            "acid": "Acid",
+            "bludgeoning": "Bludgeoning",
+            "cold": "Cold",
+            "fire": "Fire",
+            "force": "Force",
+            "lightning": "Lightning",
+            "necrotic": "Necrotic",
+            "piercing": "Piercing",
+            "poison": "Poison",
+            "psychic": "Psychic",
+            "radiant": "Radiant",
+            "slashing": "Slashing",
+            "thunder": "Thunder",
+        }
+    },
 ];
 const fieldMap = {
     "Source":"source",
@@ -127,6 +145,7 @@ const fieldMap = {
     "Duration":"duration",
     "Misc":"special",
     "Effects":"miscTags",
+    "Damage":"damageInflict",
 };
 const selectedFilters = {};
 for (const i of filterOptions) selectedFilters[i.name] = [];
@@ -143,7 +162,7 @@ function formatFilters(filters) {
                     mode: "NOT",
                     field: fieldMap[field],
                     value: i.slice(1),
-                })
+                });
             } else {
                 yesses.push({
                     mode: "IS",
