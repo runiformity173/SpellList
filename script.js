@@ -8,7 +8,6 @@ function getNameForSpell(spell,concise=true) {
     }
     return withoutSource + "--" + spell.source;
 }
-const conciseMapping = {};
 const spellLinkNames = {};
 function loadSpells(filters) {
     document.getElementById("spellOptions").innerHTML = "";
@@ -17,11 +16,6 @@ function loadSpells(filters) {
         if (!matchesFilter(spell, filters)) continue;
         const el = document.createElement("div");
         el.className = "list-group-item bg-dark text-light spell-item";
-        let spellName = spellLinkNames[getNameForSpell(spell,concise=false)];
-        if (!spellName) {
-            spellName = getNameForSpell(spell);
-            spellLinkNames[getNameForSpell(spell,concise=false)] = spellName;
-        }
         el.id = spell.name + " " + spell.source;
         el.innerHTML = `
             <div class="row align-items-center g-2">
@@ -32,7 +26,7 @@ function loadSpells(filters) {
             </div>
         `;
         el.addEventListener("click",function () {
-            window.location.replace("#"+spellName);
+            window.location.replace("#"+getNameForSpell(spell));
             document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
         });
         if (true) {
