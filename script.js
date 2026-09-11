@@ -104,11 +104,14 @@ function selectSpellList(newListName) {
     }
     if (newListName == "New List") {
         const newName = prompt("Name the new spell list:");
-        if (!newName) return;
+        if (!newName) {
+            document.getElementById("spellListSelect").value = spellLists[selectedSpellList]?.name || "All Spells";
+            return;
+        }
         const newNameNorm = newName.toLowerCase().replaceAll(" ","-");
         if (newNameNorm in spellLists) {
             alert("A spell list with that name already exists.");
-            window.location.replace(window.location.href);
+            document.getElementById("spellListSelect").value = spellLists[selectedSpellList]?.name || "All Spells";
             return;
         }
         spellLists[newNameNorm] = { // default spell list object

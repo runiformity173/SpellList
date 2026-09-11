@@ -22,14 +22,15 @@ function loadAllKeys() {
         }
     }
     const loadedLists = loadKey("spellLists");
+    let listOptions = "";
     if (loadedLists) {
-        let listOptions = "";
         for (const key in loadedLists) {
             spellLists[key] = loadedLists[key];
-            listOptions += `<option>${key}</option>`;
+            listOptions += `<option>${loadedLists[key].name}</option>`;
         }
-        document.getElementById("spellListSelect").innerHTML += listOptions;
     }
+    listOptions += "<option>New List</option>";
+    document.getElementById("spellListSelect").innerHTML += listOptions;
     selectedSpellList = location.href.split("?")[1];
     if (selectedSpellList) selectedSpellList = selectedSpellList.split("#")[0];
     if (!(selectedSpellList in spellLists)) {
@@ -39,10 +40,11 @@ function loadAllKeys() {
         const spellObjectReferences = [];
         const spellSet = new Set(spellLists[selectedSpellList].spells);
         for (const spell of spells) {
-            if (spellSet.has(getNameForSpell(spell))) {
+            if (spellSet.has(getNameForSpell(spell,concise=false))) {
                 spellObjectReferences.push(spell);
             }
         }
         loadedSpellLists[selectedSpellList] = spellObjectReferences;
+        document.getElementById("spellListSelect").value = spellLists[selectedSpellList].name;
     }
 }
