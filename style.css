@@ -99,6 +99,7 @@ input:focus + #magnifyingGlass {
     border-left: 0;
 }
 .filter-pill {
+    font-size: 0.8rem;
     transition: filter 0.1s;
     &:hover {
         filter: brightness(0.8);

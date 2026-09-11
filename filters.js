@@ -23,6 +23,20 @@ const filterOptions = [
         }
     },
     {
+        name: "Class",
+        options: {
+            "Artificer":"Artificer",
+            "Bard":"Bard",
+            "Cleric":"Cleric",
+            "Druid":"Druid",
+            "Paladin":"Paladin",
+            "Ranger":"Ranger",
+            "Sorcerer":"Sorcerer",
+            "Warlock":"Warlock",
+            "Wizard":"Wizard",
+        }
+    },
+    {
         name: "School",
         options: {
             "A":"Abjuration",
@@ -36,17 +50,15 @@ const filterOptions = [
         }
     },
     {
-        name: "Class",
+        name: "Misc",
         options: {
-            "Artificer":"Artificer",
-            "Bard":"Bard",
-            "Cleric":"Cleric",
-            "Druid":"Druid",
-            "Paladin":"Paladin",
-            "Ranger":"Ranger",
-            "Sorcerer":"Sorcerer",
-            "Warlock":"Warlock",
-            "Wizard":"Wizard",
+            "C": "Concentration",
+            "R": "Ritual",
+            "V": "Verbal",
+            "S": "Somatic",
+            "M": "Material",
+            "MC": "Material with Cost",
+            "CM": "Consumed Material",
         }
     },
     {
@@ -69,18 +81,6 @@ const filterOptions = [
             "day":"Days",
             "permanent":"Permanent",
             "special":"Special",
-        }
-    },
-    {
-        name: "Misc",
-        options: {
-            "C": "Concentration",
-            "R": "Ritual",
-            "V": "Verbal",
-            "S": "Somatic",
-            "M": "Material",
-            "MC": "Material with Cost",
-            "CM": "Consumed Material",
         }
     },
     {
@@ -213,6 +213,7 @@ const fieldMap = {
 };
 const selectedFilters = {};
 for (const i of filterOptions) selectedFilters[i.name] = [];
+let filtersExpanded = false;
 
 function formatFilters(filters) {
     const final = {};
@@ -226,6 +227,12 @@ function formatFilters(filters) {
                     mode: "NOT",
                     field: fieldMap[field],
                     value: i.slice(1),
+                });
+            } else if (field == "Misc") {
+                final.filters.push({
+                    mode: "IS",
+                    field: fieldMap[field],
+                    value: i,
                 });
             } else {
                 yesses.push({
@@ -250,20 +257,27 @@ function loadFilters() {
     const bsFilterModal = new bootstrap.Modal(filterModal);
     const modalBody = filterModal.querySelector(".modal-body");
     document.getElementById("spellFiltersContainer").innerHTML = "";
+    let beganAdvancedFilters = false;
+    let advancedBeginNode;
     for (const filter of filterOptions) {
         const selected = selectedFilters[filter.name];
         const pill = document.createElement("span");
+        if (filter.name == "Casting Time") {
+            beganAdvancedFilters = true;
+            advancedBeginNode = pill;
+        }
+        if (!filtersExpanded && beganAdvancedFilters) continue;
         pill.classList = "badge rounded-pill text-bg-primary filter-pill cursor-pointer";
-        let label = filter.name + ": ";
+        let label = filter.name + "";
         if (selected.length == 0) {
             pill.classList.remove("text-bg-primary");
             pill.classList.add("text-bg-secondary");
-            label += "Any";
         } else if (selected.length == 1) {
+            label += ": ";
             if (selected[0][0] == "!") label += "!"+filter.options[selected[0].slice(1)];
             else label += filter.options[selected[0]];
         } else {
-            label += "...";
+            label += ": ...";
         }
         pill.innerHTML = label;
         pill.addEventListener("click", function() { // construct and display filters modal
@@ -303,4 +317,23 @@ function loadFilters() {
         })
         document.getElementById("spellFiltersContainer").appendChild(pill);
     }
+    const pill = document.createElement("span");
+    pill.classList = "badge rounded-pill text-bg-primary filter-pill cursor-pointer";
+    let label = "More...";
+    if (!filtersExpanded && !filterOptions.map((o,i)=>(i > 4 && selectedFilters[o.name].length)).some(Boolean)) {
+        pill.classList.remove("text-bg-primary");
+        pill.classList.add("text-bg-secondary");
+        // label += "None";
+    } else {
+        // label += "...";
+    }
+    pill.innerHTML = label;
+    pill.addEventListener("click", function () {
+        filtersExpanded = !filtersExpanded;
+        loadFilters();
+    });
+    if (filtersExpanded)
+        document.getElementById("spellFiltersContainer").insertBefore(pill,advancedBeginNode);
+    else
+        document.getElementById("spellFiltersContainer").appendChild(pill);
 }
