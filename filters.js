@@ -1,11 +1,3 @@
-/*
-<span class="badge rounded-pill text-bg-primary">Damage: Fire</span>
-<span class="badge rounded-pill text-bg-light border text-dark">Concentration: No</span>
-*/
-
-// const tags = new Set();spells.forEach(o=>{(o.spellAttack || []).forEach(p=>tags.add(p))});tags
-
-// save and load filters from localstorage
 const filterOptions = [
     {
         name: "Source",
