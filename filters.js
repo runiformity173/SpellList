@@ -3,8 +3,6 @@
 <span class="badge rounded-pill text-bg-light border text-dark">Concentration: No</span>
 */
 
-// range?
-
 // const tags = new Set();spells.forEach(o=>{(o.spellAttack || []).forEach(p=>tags.add(p))});tags
 
 // save and load filters from localstorage
@@ -189,6 +187,20 @@ const filterOptions = [
             "Q":"Square",
             "H":"Hemisphere",
         }
+    },
+    {
+        name: "Range",
+        options: {
+            "point":"Point",
+            "cone":"Cone",
+            "line":"Line",
+            "emanation":"Emanation",
+            "radius":"Radius",
+            "sphere":"Sphere",
+            "special":"Special",
+            "hemisphere":"Hemisphere",
+            "cube":"Cube",
+        }
     }
 ];
 const fieldMap = {
@@ -205,6 +217,7 @@ const fieldMap = {
     "Save":"savingThrow",
     "Attack":"spellAttack",
     "Area":"areaTags",
+    "Range":"range",
 };
 const selectedFilters = {};
 for (const i of filterOptions) selectedFilters[i.name] = [];

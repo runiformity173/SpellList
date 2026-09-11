@@ -42,6 +42,8 @@ function matchesFilter(spell, filter) {
         let matches;
         if (filter.field == "time") {
             matches = spell[filter.field].map(o=>o.unit).includes(filter.value);
+        } else if (filter.field == "range") {
+            matches = spell[filter.field].type == filter.value;
         } else if (filter.field == "duration") {
             matches = spell[filter.field].map(o=>(o.type == "timed" ? o.duration.type : o.type)).includes(filter.value);
         } else if (filter.field == "special") {
