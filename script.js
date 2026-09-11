@@ -12,7 +12,8 @@ const conciseMapping = {};
 const spellLinkNames = {};
 function loadSpells(filters) {
     document.getElementById("spellOptions").innerHTML = "";
-    for (const spell of (selectedSpellList ? spellLists[selectedSpellList] : spells)) {
+    let selectedObjectArray = (selectedSpellList ? loadedSpellLists[selectedSpellList] : spells)
+    for (const spell of selectedObjectArray) {
         if (!matchesFilter(spell, filters)) continue;
         const el = document.createElement("div");
         el.className = "list-group-item bg-dark text-light spell-item";
@@ -24,7 +25,7 @@ function loadSpells(filters) {
         el.id = spell.name + " " + spell.source;
         el.innerHTML = `
             <div class="row align-items-center g-2">
-                <div class="col-5 fw-semibold">${spell.name}</div>
+                <div class="col-5 fw-semibold">&emsp;&emsp;${spell.name}</div>
                 <div class="col-2">${["Cantrip","1st","2nd","3rd","4th","5th","6th","7th","8th","9th"][spell.level]}</div>
                 <div class="col-4">${schoolDict[spell.school]}</div>
                 <div class="col-1">${spell.source}</div>
@@ -34,6 +35,14 @@ function loadSpells(filters) {
             window.location.replace("#"+spellName);
             document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
         });
+        if (true) {
+            const nel = document.createElement("div");
+            nel.className = "position-absolute left-0 top-0";
+            nel.style.width = "10%";
+            nel.style.marginTop = "0.5em";
+            nel.innerHTML = "a";
+            el.appendChild(nel);
+        }
         if (!matchesSearch(spell, SEARCH_QUERY)) {el.style.display = "none";}
         document.getElementById("spellOptions").appendChild(el);
     }
@@ -87,6 +96,36 @@ function filterSpells() {
         if (!el) continue;
         el.style.display = matchesSearch(spell, SEARCH_QUERY) ? "" : "none";
     }
+}
+function selectSpellList(newListName) {
+    if (newListName == "All Spells") {
+        window.location.replace(window.location.href.split("?")[0].split("#")[0]);
+        return;
+    }
+    if (newListName == "New List") {
+        const newName = prompt("Name the new spell list:");
+        if (!newName) return;
+        const newNameNorm = newName.toLowerCase().replaceAll(" ","-");
+        if (newNameNorm in spellLists) {
+            alert("A spell list with that name already exists.");
+            window.location.replace(window.location.href);
+            return;
+        }
+        spellLists[newNameNorm] = { // default spell list object
+            name: newName,
+            spells: [],
+            prepared: [],
+            maxPrepared: 0,
+        }
+        saveKey("spellLists");
+        let newUrl = "?"+newNameNorm;
+        newUrl += window.location.hash || "";
+        window.location.replace(newUrl);
+        return;
+    }
+    let newUrl = "?"+newListName.toLowerCase().replaceAll(" ","-");
+    newUrl += window.location.hash || "";
+    window.location.replace(newUrl);
 }
 function load() {
     loadAllKeys();

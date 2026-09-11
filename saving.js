@@ -1,4 +1,5 @@
 const spellLists = {};
+const loadedSpellLists = {};
 let selectedSpellList;
 
 function saveKey(key) {
@@ -31,5 +32,17 @@ function loadAllKeys() {
     }
     selectedSpellList = location.href.split("?")[1];
     if (selectedSpellList) selectedSpellList = selectedSpellList.split("#")[0];
-    if (!(selectedSpellList in spellLists)) selectedSpellList = undefined;
+    if (!(selectedSpellList in spellLists)) {
+        selectedSpellList = undefined;
+        document.getElementById("listAddOptionEl").disabled = true;
+    } else {
+        const spellObjectReferences = [];
+        const spellSet = new Set(spellLists[selectedSpellList].spells);
+        for (const spell of spells) {
+            if (spellSet.has(getNameForSpell(spell))) {
+                spellObjectReferences.push(spell);
+            }
+        }
+        loadedSpellLists[selectedSpellList] = spellObjectReferences;
+    }
 }
