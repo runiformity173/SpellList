@@ -9,13 +9,18 @@ function getNameForSpell(spell,concise=true) {
     return withoutSource + "--" + spell.source;
 }
 const conciseMapping = {};
+const spellLinkNames = {};
 function loadSpells(filters) {
     document.getElementById("spellOptions").innerHTML = "";
     for (const spell of spells) {
         if (!matchesFilter(spell, filters)) continue;
         const el = document.createElement("div");
         el.className = "list-group-item bg-dark text-light spell-item";
-        const spellName = getNameForSpell(spell);
+        let spellName = spellLinkNames[getNameForSpell(spell,concise=false)];
+        if (!spellName) {
+            spellName = getNameForSpell(spell);
+            spellLinkNames[getNameForSpell(spell,concise=false)] = spellName;
+        }
         el.id = spell.name + " " + spell.source;
         el.innerHTML = `
             <div class="row align-items-center g-2">
