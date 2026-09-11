@@ -3,7 +3,7 @@
 <span class="badge rounded-pill text-bg-light border text-dark">Concentration: No</span>
 */
 
-// saves, attacks, range?, area?
+// attacks, range?, area?
 
 // save and load filters from localstorage
 const filterOptions = [
@@ -154,6 +154,17 @@ const filterOptions = [
             "unconscious": "Unconscious",
         }
     },
+    {
+        name: "Saves",
+        options: {
+            "strength": "Strength",
+            "dexterity": "Dexterity",
+            "constitution": "Constitution",
+            "intelligence": "Intelligence",
+            "wisdom": "Wisdom",
+            "charisma": "Charisma",
+        }
+    },
 ];
 const fieldMap = {
     "Source":"source",
@@ -166,6 +177,7 @@ const fieldMap = {
     "Effects":"miscTags",
     "Damage":"damageInflict",
     "Condition":"conditionInflict",
+    "Saves":"savingThrow"
 };
 const selectedFilters = {};
 for (const i of filterOptions) selectedFilters[i.name] = [];
