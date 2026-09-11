@@ -1,9 +1,3 @@
-/*
-<span class="badge rounded-pill text-bg-primary">Damage: Fire</span>
-<span class="badge rounded-pill text-bg-light border text-dark">Concentration: No</span>
-*/
-
-// save and load filters from localstorage
 const filterOptions = [
     {
         name: "Source",
@@ -29,19 +23,6 @@ const filterOptions = [
         }
     },
     {
-        name: "School",
-        options: {
-            "A":"Abjuration",
-            "C":"Conjuration",
-            "D":"Divination",
-            "E":"Enchantment",
-            "V":"Evocation",
-            "I":"Illusion",
-            "N":"Necromancy",
-            "T":"Transmutation",
-        }
-    },
-    {
         name: "Class",
         options: {
             "Artificer":"Artificer",
@@ -55,15 +36,184 @@ const filterOptions = [
             "Wizard":"Wizard",
         }
     },
+    {
+        name: "School",
+        options: {
+            "A":"Abjuration",
+            "C":"Conjuration",
+            "D":"Divination",
+            "E":"Enchantment",
+            "V":"Evocation",
+            "I":"Illusion",
+            "N":"Necromancy",
+            "T":"Transmutation",
+        }
+    },
+    {
+        name: "Misc",
+        options: {
+            "C": "Concentration",
+            "R": "Ritual",
+            "V": "Verbal",
+            "S": "Somatic",
+            "M": "Material",
+            "MC": "Material with Cost",
+            "CM": "Consumed Material",
+        }
+    },
+    {
+        name: "Casting Time",
+        options: {
+            "action":"Action",
+            "bonus":"Bonus Action",
+            "reaction":"Reaction",
+            "minute":"Minutes",
+            "hour":"Hours",
+        }
+    },
+    {
+        name: "Duration",
+        options: {
+            "instant":"Instantaneous",
+            "round":"Round",
+            "minute":"Minutes",
+            "hour":"Hours",
+            "day":"Days",
+            "permanent":"Permanent",
+            "special":"Special",
+        }
+    },
+    {
+        name: "Effects",
+        options: {
+            "AAD": "Additional Attack Damage",
+            "OBJ": "Affects Objects",
+            "LGT": "Creates Light",
+            "LGTS": "Creates Sunlight",
+            "DFT": "Difficult Terrain",
+            "FMV": "Forced Movement",
+            "ADV": "Grants Advantage",
+            "THP": "Grants Temporary Hit Points",
+            "HL": "Healing",
+            "MAC": "Modifies AC",
+            "OBS": "Obscures Vision",
+            "PRM": "Permanent Effects",
+            "PIR": "Permanent If Repeated",
+            "PS": "Plane Shifting",
+            "SGT": "Requires Sight",
+            "RO": "Rollable Effects",
+            "SCL": "Scaling Effects",
+            "SCT": "Scaling Targets",
+            "SMN": "Summons Creature",
+            "TP": "Teleportation",
+            "UBA": "Uses Bonus Action",
+        }
+    },
+    {
+        name: "Damage",
+        options: {
+            "acid": "Acid",
+            "bludgeoning": "Bludgeoning",
+            "cold": "Cold",
+            "fire": "Fire",
+            "force": "Force",
+            "lightning": "Lightning",
+            "necrotic": "Necrotic",
+            "piercing": "Piercing",
+            "poison": "Poison",
+            "psychic": "Psychic",
+            "radiant": "Radiant",
+            "slashing": "Slashing",
+            "thunder": "Thunder",
+        }
+    },
+    {
+        name: "Condition",
+        options: {
+            "blinded": "Blinded",
+            "charmed": "Charmed",
+            "deafened": "Deafened",
+            "frightened": "Frightened",
+            "grappled": "Grappled",
+            "incapacitated": "Incapacitated",
+            "invisible": "Invisible",
+            "paralyzed": "Paralyzed",
+            "petrified": "Petrified",
+            "poisoned": "Poisoned",
+            "prone": "Prone",
+            "restrained": "Restrained",
+            "stunned": "Stunned",
+            "unconscious": "Unconscious",
+        }
+    },
+    {
+        name: "Save",
+        options: {
+            "strength": "Strength",
+            "dexterity": "Dexterity",
+            "constitution": "Constitution",
+            "intelligence": "Intelligence",
+            "wisdom": "Wisdom",
+            "charisma": "Charisma",
+        }
+    },
+    {
+        name: "Attack",
+        options: {
+            "R": "Ranged",
+            "M": "Melee",
+        }
+    },
+    {
+        name: "Area",
+        options: {
+            "MT":"Single Target",
+            "ST":"Multiple Targets",
+            "S":"Sphere",
+            "L":"Line",
+            "N":"Cone",
+            "C":"Cube",
+            "Y":"Cylinder",
+            "W":"Wall",
+            "R":"Circle",
+            "Q":"Square",
+            "H":"Hemisphere",
+        }
+    },
+    {
+        name: "Range",
+        options: {
+            "point":"Point",
+            "cone":"Cone",
+            "line":"Line",
+            "emanation":"Emanation",
+            "radius":"Radius",
+            "sphere":"Sphere",
+            "special":"Special",
+            "hemisphere":"Hemisphere",
+            "cube":"Cube",
+        }
+    }
 ];
 const fieldMap = {
     "Source":"source",
     "Level":"level",
     "School":"school",
     "Class":"classes",
+    "Casting Time":"time",
+    "Duration":"duration",
+    "Misc":"special",
+    "Effects":"miscTags",
+    "Damage":"damageInflict",
+    "Condition":"conditionInflict",
+    "Save":"savingThrow",
+    "Attack":"spellAttack",
+    "Area":"areaTags",
+    "Range":"range",
 };
 const selectedFilters = {};
 for (const i of filterOptions) selectedFilters[i.name] = [];
+let filtersExpanded = false;
 
 function formatFilters(filters) {
     const final = {};
@@ -77,7 +227,13 @@ function formatFilters(filters) {
                     mode: "NOT",
                     field: fieldMap[field],
                     value: i.slice(1),
-                })
+                });
+            } else if (field == "Misc") {
+                final.filters.push({
+                    mode: "IS",
+                    field: fieldMap[field],
+                    value: i,
+                });
             } else {
                 yesses.push({
                     mode: "IS",
@@ -101,23 +257,30 @@ function loadFilters() {
     const bsFilterModal = new bootstrap.Modal(filterModal);
     const modalBody = filterModal.querySelector(".modal-body");
     document.getElementById("spellFiltersContainer").innerHTML = "";
+    let beganAdvancedFilters = false;
+    let advancedBeginNode;
     for (const filter of filterOptions) {
         const selected = selectedFilters[filter.name];
-        let label = filter.name + ": ";
+        const pill = document.createElement("span");
+        if (filter.name == "Casting Time") {
+            beganAdvancedFilters = true;
+            advancedBeginNode = pill;
+        }
+        if (!filtersExpanded && beganAdvancedFilters) continue;
+        pill.classList = "badge rounded-pill text-bg-primary filter-pill cursor-pointer";
+        let label = filter.name + "";
         if (selected.length == 0) {
-            if (filter.name != "Other") {
-                label += "Any";
-            }
+            pill.classList.remove("text-bg-primary");
+            pill.classList.add("text-bg-secondary");
         } else if (selected.length == 1) {
+            label += ": ";
             if (selected[0][0] == "!") label += "!"+filter.options[selected[0].slice(1)];
             else label += filter.options[selected[0]];
         } else {
-            label += "...";
+            label += ": ...";
         }
-        const pill = document.createElement("span");
-        pill.classList = "badge rounded-pill text-bg-primary filter-pill cursor-pointer";
         pill.innerHTML = label;
-        pill.addEventListener("click", function() { // construct and display filter's modal
+        pill.addEventListener("click", function() { // construct and display filters modal
             filterModal.querySelector(".modal-title").innerHTML = filter.name + " Filters";
             modalBody.innerHTML = "";
             for (const i in filter.options) {
@@ -154,4 +317,23 @@ function loadFilters() {
         })
         document.getElementById("spellFiltersContainer").appendChild(pill);
     }
+    const pill = document.createElement("span");
+    pill.classList = "badge rounded-pill text-bg-primary filter-pill cursor-pointer";
+    let label = "More...";
+    if (!filtersExpanded && !filterOptions.map((o,i)=>(i > 4 && selectedFilters[o.name].length)).some(Boolean)) {
+        pill.classList.remove("text-bg-primary");
+        pill.classList.add("text-bg-secondary");
+        // label += "None";
+    } else {
+        // label += "...";
+    }
+    pill.innerHTML = label;
+    pill.addEventListener("click", function () {
+        filtersExpanded = !filtersExpanded;
+        loadFilters();
+    });
+    if (filtersExpanded)
+        document.getElementById("spellFiltersContainer").insertBefore(pill,advancedBeginNode);
+    else
+        document.getElementById("spellFiltersContainer").appendChild(pill);
 }
