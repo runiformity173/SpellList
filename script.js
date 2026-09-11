@@ -99,7 +99,7 @@ function filterSpells() {
 }
 function selectSpellList(newListName) {
     if (newListName == "All Spells") {
-        window.location.replace(window.location.href.split("?")[0].split("#")[0]);
+        window.location.replace(window.location.href.split("?")[0].split("#")[0] + (window.location.hash || ""));
         return;
     }
     if (newListName == "New List") {
