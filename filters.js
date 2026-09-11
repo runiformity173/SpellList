@@ -3,7 +3,9 @@
 <span class="badge rounded-pill text-bg-light border text-dark">Concentration: No</span>
 */
 
-// range?, area?
+// range?
+
+// const tags = new Set();spells.forEach(o=>{(o.spellAttack || []).forEach(p=>tags.add(p))});tags
 
 // save and load filters from localstorage
 const filterOptions = [
@@ -172,6 +174,22 @@ const filterOptions = [
             "M": "Melee",
         }
     },
+    {
+        name: "Area",
+        options: {
+            "MT":"Single Target",
+            "ST":"Multiple Targets",
+            "S":"Sphere",
+            "L":"Line",
+            "N":"Cone",
+            "C":"Cube",
+            "Y":"Cylinder",
+            "W":"Wall",
+            "R":"Circle",
+            "Q":"Square",
+            "H":"Hemisphere",
+        }
+    }
 ];
 const fieldMap = {
     "Source":"source",
@@ -186,6 +204,7 @@ const fieldMap = {
     "Condition":"conditionInflict",
     "Save":"savingThrow",
     "Attack":"spellAttack",
+    "Area":"areaTags",
 };
 const selectedFilters = {};
 for (const i of filterOptions) selectedFilters[i.name] = [];
