@@ -12,7 +12,7 @@ const conciseMapping = {};
 const spellLinkNames = {};
 function loadSpells(filters) {
     document.getElementById("spellOptions").innerHTML = "";
-    for (const spell of spells) {
+    for (const spell of (selectedSpellList ? spellLists[selectedSpellList] : spells)) {
         if (!matchesFilter(spell, filters)) continue;
         const el = document.createElement("div");
         el.className = "list-group-item bg-dark text-light spell-item";
