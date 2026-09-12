@@ -22,7 +22,15 @@ function reversableCompareSpells(a,b) {
     return (sortingReversed ? -1 : 1) * compareSpells(a,b);
 }
 function moveSortingArrow() {
-
+    const headers = document.getElementById("spellListHeaders").firstElementChild;
+    for (const el of headers.children) {
+        el.innerHTML = el.innerHTML.replaceAll(/[↑↓]/g,"");
+    }
+    let arrow = sortingReversed ? "↑" : "↓";
+    if (sortingMode == "name") headers.children[0].innerHTML += arrow;
+    if (sortingMode == "level") headers.children[1].innerHTML += arrow;
+    if (sortingMode == "school") headers.children[2].innerHTML += arrow;
+    if (sortingMode == "source") headers.children[3].innerHTML += arrow;
 }
 function clickSortMode(mode) {
     if (mode == sortingMode) sortingReversed = !sortingReversed;
