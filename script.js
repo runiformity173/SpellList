@@ -8,35 +8,47 @@ function getNameForSpell(spell,concise=true) {
     }
     return withoutSource + "--" + spell.source;
 }
-const conciseMapping = {};
 const spellLinkNames = {};
 function loadSpells(filters) {
     document.getElementById("spellOptions").innerHTML = "";
-    for (const spell of spells) {
+    let selectedObjectArray = (selectedSpellList && listMode == "View List" ? loadedSpellLists[selectedSpellList] : spells);
+    let spellSet; // spells that start checked
+    if (selectedSpellList && listMode == "Edit List") {
+        spellSet = new Set(spellLists[selectedSpellList].spells);
+    } else if (selectedSpellList) {
+        spellSet = new Set(spellLists[selectedSpellList].prepared);
+    }
+    for (const spell of selectedObjectArray) {
         if (!matchesFilter(spell, filters)) continue;
         const el = document.createElement("div");
         el.className = "list-group-item bg-dark text-light spell-item";
-        let spellName = spellLinkNames[getNameForSpell(spell,concise=false)];
-        if (!spellName) {
-            spellName = getNameForSpell(spell);
-            spellLinkNames[getNameForSpell(spell,concise=false)] = spellName;
-        }
         el.id = spell.name + " " + spell.source;
         el.innerHTML = `
             <div class="row align-items-center g-2">
                 <div class="col-5 fw-semibold">${spell.name}</div>
                 <div class="col-2">${["Cantrip","1st","2nd","3rd","4th","5th","6th","7th","8th","9th"][spell.level]}</div>
-                <div class="col-4">${schoolDict[spell.school]}</div>
+                <div class="col-3">${schoolDict[spell.school]}</div>
                 <div class="col-1">${spell.source}</div>
             </div>
         `;
         el.addEventListener("click",function () {
-            window.location.replace("#"+spellName);
+            window.location.replace("#"+getNameForSpell(spell));
             document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
         });
+        if (selectedSpellList) {
+            const spellName = getNameForSpell(spell,concise=false);
+            const nel = document.createElement("div");
+            nel.className = "position-absolute top-0";
+            nel.style.width = "10%";
+            nel.style.marginTop = "0.5em";
+            nel.innerHTML = `<input type="checkbox" class="cursor-pointer spell-checkbox" onclick="setSpellInList('${spellName}',this.checked)" id="checkbox-${spellName}">`;
+            nel.firstElementChild.checked = spellSet.has(spellName);
+            el.appendChild(nel);
+        }
         if (!matchesSearch(spell, SEARCH_QUERY)) {el.style.display = "none";}
         document.getElementById("spellOptions").appendChild(el);
     }
+    document.getElementById("selectAllCheckbox").style.display = selectedSpellList ? "" : "none";
 }
 function matchesFilter(spell, filter) {
     if (!filter) return true;
@@ -81,12 +93,21 @@ function matchesSearch(spell, search) {
     if (spell.name.toLowerCase().includes(processedSearch)) return true;
     return false;
 }
-function filterSpells() {
+function filterSpells(returnVal=false) {
+    let result;
+    if (returnVal) result = [];
     for (const spell of spells) {
         const el = document.getElementById((spell.name + " " + spell.source) || "");
         if (!el) continue;
-        el.style.display = matchesSearch(spell, SEARCH_QUERY) ? "" : "none";
+        if (returnVal) {
+            if (matchesSearch(spell, SEARCH_QUERY)) {
+                result.push(spell);
+            }
+        } else {
+            el.style.display = matchesSearch(spell, SEARCH_QUERY) ? "" : "none";
+        }
     }
+    return result;
 }
 function load() {
     loadAllKeys();
