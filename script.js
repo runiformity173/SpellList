@@ -1,6 +1,26 @@
 // "Closest match" spell when results are empty?
 let SEARCH_QUERY = "";
+let sortingReversed = false;
+let sortingMode = "level";
 
+function compareSpells(a,b) {
+    if (sortingMode == "level") {
+        if (a.level != b.level) return a.level-b.level;
+    } else if (sortingMode == "name") {
+        if (a.name != b.name) return a.name.localeCompare(b.name);
+    } else if (sortingMode == "school") {
+        if (a.school != b.school) return schoolDict[a.school].localeCompare(schoolDict[b.school]);
+    } else if (sortingMode == "source") {
+        if (a.source != b.source) return a.source.localeCompare(b.source);
+    }
+    if (a.name != b.name) return a.name.localeCompare(b.name);
+    if (a.level != b.level) return a.level-b.level;
+    if (a.source != b.source) return a.source.localeCompare(b.source);
+    return 0;
+}
+function reversableCompareSpells(a,b) {
+    return (sortingReversed ? -1 : 1) * compareSpells(a,b);
+}
 function getNameForSpell(spell,concise=true) {
     const withoutSource = spell.name.replaceAll(" ","-").toLowerCase();
     if (concise && spell === getSpellByName(withoutSource)) {
@@ -18,6 +38,7 @@ function loadSpells(filters) {
     } else if (selectedSpellList) {
         spellSet = new Set(spellLists[selectedSpellList].prepared);
     }
+    selectedObjectArray.sort(reversableCompareSpells);
     for (const spell of selectedObjectArray) {
         if (!matchesFilter(spell, filters)) continue;
         const el = document.createElement("div");
