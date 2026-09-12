@@ -33,6 +33,7 @@ If on main page, dropdown for spell list select. If in spell lists, there's also
 # TODO
 - Sorting
 - Add spell preparation mode & indicators
+- Add list of sources to spells
 - Always prepared?
 - Delete lists
 - Did you mean? When searching and no results show up.
