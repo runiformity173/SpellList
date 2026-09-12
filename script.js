@@ -13,13 +13,26 @@ function compareSpells(a,b) {
     } else if (sortingMode == "source") {
         if (a.source != b.source) return a.source.localeCompare(b.source);
     }
-    if (a.name != b.name) return a.name.localeCompare(b.name);
     if (a.level != b.level) return a.level-b.level;
+    if (a.name != b.name) return a.name.localeCompare(b.name);
     if (a.source != b.source) return a.source.localeCompare(b.source);
     return 0;
 }
 function reversableCompareSpells(a,b) {
     return (sortingReversed ? -1 : 1) * compareSpells(a,b);
+}
+function moveSortingArrow() {
+
+}
+function clickSortMode(mode) {
+    if (mode == sortingMode) sortingReversed = !sortingReversed;
+    else {
+        sortingReversed = false;
+        sortingMode = mode;
+    }
+    moveSortingArrow();
+    loadSpells(formatFilters(selectedFilters));
+    saveKey("sortData");
 }
 function getNameForSpell(spell,concise=true) {
     const withoutSource = spell.name.replaceAll(" ","-").toLowerCase();

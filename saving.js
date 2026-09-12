@@ -6,6 +6,7 @@ function saveKey(key) {
     const res = { // update whenever I add something else to save
         spellLists,
         selectedFilters,
+        sortData: {sortingMode, sortingReversed},
     }[key] || {};
     localStorage.setItem("spellList-"+key, JSON.stringify(res));
 }
@@ -51,4 +52,8 @@ function loadAllKeys() {
         spellLists[selectedSpellList].spells = orderedSpells;
         document.getElementById("spellListSelect").value = spellLists[selectedSpellList].name;
     }
+    const loadedSortingData = loadKey("sortData");
+    if (loadedSortingData?.sortingMode) sortingMode = loadedSortingData.sortingMode;
+    if (loadedSortingData?.sortingReversed) sortingReversed = loadedSortingData.sortingReversed;
+    moveSortingArrow();
 }
