@@ -29,3 +29,10 @@ If on main page, dropdown for spell list select. If in spell lists, there's also
 ## Spell List Utils
 - Preparation with limits and such
 - Change details for always prepared
+
+# TODO
+- Add spells to lists
+- Add spell preparation mode & indicators
+- Sorting
+- Delete lists
+- Did you mean? When searching and no results show up.
