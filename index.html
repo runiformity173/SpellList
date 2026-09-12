@@ -59,6 +59,7 @@
               <div class="col-12 col-sm-3 mb-3 d-flex flex-column">
                 <select
                   class="bg-dark form-select text-light rounded-0 cursor-pointer border-bottom-0"
+                  onchange="setViewMode(this.value)"
                 >
                   <option selected>View List</option>
                   <option id="listAddOptionEl">Edit List</option>
@@ -77,10 +78,13 @@
             <div class="border rounded overflow-auto flex-grow-1 position-relative overflow-hidden d-flex flex-column" style="height: 600px;" id="spellListContainer">
               <div class="list-group-item bg-dark text-light" id="spellListHeaders">
                 <div class="row align-items-center g-2 text-secondary">
-                  <div class="col-5 fw-semibold">&emsp;&emsp;Name</div>
+                  <div class="col-5 fw-semibold">Name</div>
                   <div class="col-2">Level</div>
-                  <div class="col-4">School</div>
+                  <div class="col-3">School</div>
                   <div class="col-1">Source</div>
+                </div>
+                <div class="position-absolute top-0" style="width: 10%;margin-top: 0.5em;">
+                  <input type="checkbox" class="cursor-pointer spell-checkbox" onchange="selectAllCheckbox(this.checked)" id="selectAllCheckbox">
                 </div>
               </div>
               <div class="list-group list-group-flush overflow-auto" id="spellOptions">
@@ -131,6 +135,7 @@
   <script src="view/displaySpell.js"></script>
   <script src="script.js"></script>
   <script src="filters.js"></script>
+  <script src="spellList.js"></script>
   <script src="saving.js"></script>
 </body>
 </html>

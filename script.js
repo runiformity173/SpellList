@@ -11,7 +11,13 @@ function getNameForSpell(spell,concise=true) {
 const spellLinkNames = {};
 function loadSpells(filters) {
     document.getElementById("spellOptions").innerHTML = "";
-    let selectedObjectArray = (selectedSpellList ? loadedSpellLists[selectedSpellList] : spells)
+    let selectedObjectArray = (selectedSpellList && listMode == "View List" ? loadedSpellLists[selectedSpellList] : spells);
+    let spellSet; // spells that start checked
+    if (selectedSpellList && listMode == "Edit List") {
+        spellSet = new Set(spellLists[selectedSpellList].spells);
+    } else if (selectedSpellList) {
+        spellSet = new Set(spellLists[selectedSpellList].prepared);
+    }
     for (const spell of selectedObjectArray) {
         if (!matchesFilter(spell, filters)) continue;
         const el = document.createElement("div");
@@ -19,9 +25,9 @@ function loadSpells(filters) {
         el.id = spell.name + " " + spell.source;
         el.innerHTML = `
             <div class="row align-items-center g-2">
-                <div class="col-5 fw-semibold">&emsp;&emsp;${spell.name}</div>
+                <div class="col-5 fw-semibold">${spell.name}</div>
                 <div class="col-2">${["Cantrip","1st","2nd","3rd","4th","5th","6th","7th","8th","9th"][spell.level]}</div>
-                <div class="col-4">${schoolDict[spell.school]}</div>
+                <div class="col-3">${schoolDict[spell.school]}</div>
                 <div class="col-1">${spell.source}</div>
             </div>
         `;
@@ -29,17 +35,20 @@ function loadSpells(filters) {
             window.location.replace("#"+getNameForSpell(spell));
             document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
         });
-        if (true) {
+        if (selectedSpellList) {
+            const spellName = getNameForSpell(spell,concise=false);
             const nel = document.createElement("div");
-            nel.className = "position-absolute left-0 top-0";
+            nel.className = "position-absolute top-0";
             nel.style.width = "10%";
             nel.style.marginTop = "0.5em";
-            nel.innerHTML = "a";
+            nel.innerHTML = `<input type="checkbox" class="cursor-pointer spell-checkbox" onclick="setSpellInList('${spellName}',this.checked)">`;
+            nel.firstElementChild.checked = spellSet.has(spellName);
             el.appendChild(nel);
         }
         if (!matchesSearch(spell, SEARCH_QUERY)) {el.style.display = "none";}
         document.getElementById("spellOptions").appendChild(el);
     }
+    document.getElementById("selectAllCheckbox").style.display = selectedSpellList ? "" : "none";
 }
 function matchesFilter(spell, filter) {
     if (!filter) return true;
@@ -90,39 +99,6 @@ function filterSpells() {
         if (!el) continue;
         el.style.display = matchesSearch(spell, SEARCH_QUERY) ? "" : "none";
     }
-}
-function selectSpellList(newListName) {
-    if (newListName == "All Spells") {
-        window.location.replace(window.location.href.split("?")[0].split("#")[0] + (window.location.hash || ""));
-        return;
-    }
-    if (newListName == "New List") {
-        const newName = prompt("Name the new spell list:");
-        if (!newName) {
-            document.getElementById("spellListSelect").value = spellLists[selectedSpellList]?.name || "All Spells";
-            return;
-        }
-        const newNameNorm = newName.toLowerCase().replaceAll(" ","-");
-        if (newNameNorm in spellLists) {
-            alert("A spell list with that name already exists.");
-            document.getElementById("spellListSelect").value = spellLists[selectedSpellList]?.name || "All Spells";
-            return;
-        }
-        spellLists[newNameNorm] = { // default spell list object
-            name: newName,
-            spells: [],
-            prepared: [],
-            maxPrepared: 0,
-        }
-        saveKey("spellLists");
-        let newUrl = "?"+newNameNorm;
-        newUrl += window.location.hash || "";
-        window.location.replace(newUrl);
-        return;
-    }
-    let newUrl = "?"+newListName.toLowerCase().replaceAll(" ","-");
-    newUrl += window.location.hash || "";
-    window.location.replace(newUrl);
 }
 function load() {
     loadAllKeys();
