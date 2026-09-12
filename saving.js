@@ -39,12 +39,16 @@ function loadAllKeys() {
     } else {
         const spellObjectReferences = [];
         const spellSet = new Set(spellLists[selectedSpellList].spells);
+        const orderedSpells = [];
         for (const spell of spells) {
-            if (spellSet.has(getNameForSpell(spell,concise=false))) {
+            const spellName = getNameForSpell(spell,concise=false);
+            if (spellSet.has(spellName)) {
                 spellObjectReferences.push(spell);
+                orderedSpells.push(spellName);
             }
         }
         loadedSpellLists[selectedSpellList] = spellObjectReferences;
+        spellLists[selectedSpellList].spells = orderedSpells;
         document.getElementById("spellListSelect").value = spellLists[selectedSpellList].name;
     }
 }

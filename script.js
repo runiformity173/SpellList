@@ -41,7 +41,7 @@ function loadSpells(filters) {
             nel.className = "position-absolute top-0";
             nel.style.width = "10%";
             nel.style.marginTop = "0.5em";
-            nel.innerHTML = `<input type="checkbox" class="cursor-pointer spell-checkbox" onclick="setSpellInList('${spellName}',this.checked)">`;
+            nel.innerHTML = `<input type="checkbox" class="cursor-pointer spell-checkbox" onclick="setSpellInList('${spellName}',this.checked)" id="checkbox-${spellName}">`;
             nel.firstElementChild.checked = spellSet.has(spellName);
             el.appendChild(nel);
         }
@@ -93,12 +93,21 @@ function matchesSearch(spell, search) {
     if (spell.name.toLowerCase().includes(processedSearch)) return true;
     return false;
 }
-function filterSpells() {
+function filterSpells(returnVal=false) {
+    let result;
+    if (returnVal) result = [];
     for (const spell of spells) {
         const el = document.getElementById((spell.name + " " + spell.source) || "");
         if (!el) continue;
-        el.style.display = matchesSearch(spell, SEARCH_QUERY) ? "" : "none";
+        if (returnVal) {
+            if (matchesSearch(spell, SEARCH_QUERY)) {
+                result.push(spell);
+            }
+        } else {
+            el.style.display = matchesSearch(spell, SEARCH_QUERY) ? "" : "none";
+        }
     }
+    return result;
 }
 function load() {
     loadAllKeys();
