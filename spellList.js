@@ -10,8 +10,42 @@ function selectAllCheckbox(val) {
             saveKey("spellLists");
         }
     } else {
-        alert("Prepare all is not currently supported. Check back later");
+        if (confirm(`Are you sure you want to ${val ? "prepare" : "unprepare"} all of these spells?`)) {
+            for (const spell of filterSpells(returnVal=true)) {
+                const spellName = getNameForSpell(spell,concise=false);
+                setSpellInList(spellName,val,save=false);
+                document.getElementById("checkbox-"+spellName).checked = val;
+            }
+            saveKey("spellLists");
+        }
     }
+}
+function reevaluateSelectAllChecked() {
+    let anyChecked = false;
+    let anyUnchecked = false;
+    for (const el of document.querySelectorAll("#spellOptions .list-group-item input[type=checkbox]")) {
+        if (el.closest(".list-group-item").style.display == "none") continue;
+        if (el.checked) anyChecked = true;
+        else anyUnchecked = true;
+    }
+    if (anyChecked && !anyUnchecked) {
+        document.getElementById("selectAllCheckbox").checked = true;
+    } else if (anyUnchecked) {
+        document.getElementById("selectAllCheckbox").checked = false;
+    }
+}
+function updatePreparedFraction() {
+    if (!selectedSpellList) return;
+    if (listMode == "Edit List") {
+        document.getElementById("spellPreparedSpan").innerHTML = `<input
+            id="spellPreparedInput"
+            value="${spellLists[selectedSpellList].maxPrepared}"
+            onchange="spellLists[selectedSpellList].maxPrepared = Number(this.value);saveKey('spellLists');"
+        >`
+        return;
+    }
+    if (spellLists[selectedSpellList].maxPrepared <= 0) return;
+    document.getElementById("spellPreparedSpan").innerHTML = spellLists[selectedSpellList].prepared.length + "/" + spellLists[selectedSpellList].maxPrepared;
 }
 function setSpellInList(spellName,toggle,save=true) {
     let targetList;
@@ -20,16 +54,20 @@ function setSpellInList(spellName,toggle,save=true) {
     } else if (listMode == "Edit List") {
         targetList = spellLists[selectedSpellList].spells;
     }
-    if (toggle) {
-        if (targetList.includes(spellName)) return; // already in list
-        targetList.push(spellName);
-        if (listMode == "Edit List") loadedSpellLists[selectedSpellList].push(getSpellByName(spellName));
-    } else {
-        const removedIndex = targetList.indexOf(spellName);
-        if (removedIndex == -1) return; // not in list, so don't remove it
-        if (listMode == "Edit List") loadedSpellLists[selectedSpellList].splice(removedIndex,1);
-        targetList.splice(removedIndex,1);
+    for (let i = 0; i <= +(listMode == "Edit List" && !toggle); i++) {
+        if (toggle) {
+            if (targetList.includes(spellName)) return; // already in list
+            targetList.push(spellName);
+            if (listMode == "Edit List") loadedSpellLists[selectedSpellList].push(getSpellByName(spellName));
+        } else {
+            const removedIndex = targetList.indexOf(spellName);
+            if (removedIndex == -1) return; // not in list, so don't remove it
+            if (listMode == "Edit List" && i == 0) loadedSpellLists[selectedSpellList].splice(removedIndex,1);
+            targetList.splice(removedIndex,1);
+        }
+        targetList = spellLists[selectedSpellList].prepared;
     }
+    updatePreparedFraction();
     if (save) saveKey("spellLists");
 }
 function setViewMode(val) {

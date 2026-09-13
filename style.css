@@ -150,3 +150,23 @@ div:has(> .spell-checkbox) {
     right: 0.5em;
     text-align: right;
 }
+.list-group-flush>.list-group-item:last-child { /* bootstrap is annoying, gotta override */
+    border-bottom-width: 1px !important;
+}
+#selectAllCheckboxContainer {
+    width: 1.5em;
+    height: 1.5em;
+    margin-top: 0.5em;
+    position: absolute;
+    right: 0.5em;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#spellPreparedInput {
+    background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity));
+    color: white;
+    border:1px white dashed;
+    border-radius: 3px;
+    width:2em;
+    text-align: center;
+}

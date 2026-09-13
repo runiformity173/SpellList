@@ -52,7 +52,7 @@ function getNameForSpell(spell,concise=true) {
 const spellLinkNames = {};
 function loadSpells(filters) {
     document.getElementById("spellOptions").innerHTML = "";
-    let selectedObjectArray = (selectedSpellList && listMode == "View List" ? loadedSpellLists[selectedSpellList] : spells);
+    let selectedObjectArray = Array.from(selectedSpellList && listMode == "View List" ? loadedSpellLists[selectedSpellList] : spells);
     let spellSet; // spells that start checked
     if (selectedSpellList && listMode == "Edit List") {
         spellSet = new Set(spellLists[selectedSpellList].spells);
@@ -90,6 +90,8 @@ function loadSpells(filters) {
         if (!matchesSearch(spell, SEARCH_QUERY)) {el.style.display = "none";}
         document.getElementById("spellOptions").appendChild(el);
     }
+    reevaluateSelectAllChecked();
+    updatePreparedFraction();
     document.getElementById("selectAllCheckbox").style.display = selectedSpellList ? "" : "none";
 }
 function matchesFilter(spell, filter) {
@@ -149,6 +151,7 @@ function filterSpells(returnVal=false) {
             el.style.display = matchesSearch(spell, SEARCH_QUERY) ? "" : "none";
         }
     }
+    if (!returnVal) reevaluateSelectAllChecked();
     return result;
 }
 function load() {
@@ -172,6 +175,7 @@ function load() {
         }
     }
     loadFilters();
+    updatePreparedFraction();
 }
 
 
