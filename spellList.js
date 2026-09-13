@@ -10,7 +10,14 @@ function selectAllCheckbox(val) {
             saveKey("spellLists");
         }
     } else {
-        alert("Prepare all is not currently supported. Check back later");
+        if (confirm(`Are you sure you want to ${val ? "prepare" : "unprepare"} all of these spells?`)) {
+            for (const spell of filterSpells(returnVal=true)) {
+                const spellName = getNameForSpell(spell,concise=false);
+                setSpellInList(spellName,val,save=false);
+                document.getElementById("checkbox-"+spellName).checked = val;
+            }
+            saveKey("spellLists");
+        }
     }
 }
 function setSpellInList(spellName,toggle,save=true) {

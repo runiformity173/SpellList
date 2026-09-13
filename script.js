@@ -52,7 +52,7 @@ function getNameForSpell(spell,concise=true) {
 const spellLinkNames = {};
 function loadSpells(filters) {
     document.getElementById("spellOptions").innerHTML = "";
-    let selectedObjectArray = (selectedSpellList && listMode == "View List" ? loadedSpellLists[selectedSpellList] : spells);
+    let selectedObjectArray = Array.from(selectedSpellList && listMode == "View List" ? loadedSpellLists[selectedSpellList] : spells);
     let spellSet; // spells that start checked
     if (selectedSpellList && listMode == "Edit List") {
         spellSet = new Set(spellLists[selectedSpellList].spells);
