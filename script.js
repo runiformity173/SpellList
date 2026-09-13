@@ -91,6 +91,7 @@ function loadSpells(filters) {
         document.getElementById("spellOptions").appendChild(el);
     }
     reevaluateSelectAllChecked();
+    updatePreparedFraction();
     document.getElementById("selectAllCheckbox").style.display = selectedSpellList ? "" : "none";
 }
 function matchesFilter(spell, filter) {
@@ -174,6 +175,7 @@ function load() {
         }
     }
     loadFilters();
+    updatePreparedFraction();
 }
 
 

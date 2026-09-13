@@ -34,6 +34,19 @@ function reevaluateSelectAllChecked() {
         document.getElementById("selectAllCheckbox").checked = false;
     }
 }
+function updatePreparedFraction() {
+    if (!selectedSpellList) return;
+    if (listMode == "Edit List") {
+        document.getElementById("spellPreparedSpan").innerHTML = `<input
+            id="spellPreparedInput"
+            value="${spellLists[selectedSpellList].maxPrepared}"
+            onchange="spellLists[selectedSpellList].maxPrepared = Number(this.value);saveKey('spellLists');"
+        >`
+        return;
+    }
+    if (spellLists[selectedSpellList].maxPrepared <= 0) return;
+    document.getElementById("spellPreparedSpan").innerHTML = spellLists[selectedSpellList].prepared.length + "/" + spellLists[selectedSpellList].maxPrepared;
+}
 function setSpellInList(spellName,toggle,save=true) {
     let targetList;
     if (listMode == "View List") {
@@ -41,16 +54,20 @@ function setSpellInList(spellName,toggle,save=true) {
     } else if (listMode == "Edit List") {
         targetList = spellLists[selectedSpellList].spells;
     }
-    if (toggle) {
-        if (targetList.includes(spellName)) return; // already in list
-        targetList.push(spellName);
-        if (listMode == "Edit List") loadedSpellLists[selectedSpellList].push(getSpellByName(spellName));
-    } else {
-        const removedIndex = targetList.indexOf(spellName);
-        if (removedIndex == -1) return; // not in list, so don't remove it
-        if (listMode == "Edit List") loadedSpellLists[selectedSpellList].splice(removedIndex,1);
-        targetList.splice(removedIndex,1);
+    for (let i = 0; i <= +(listMode == "Edit List" && !toggle); i++) {
+        if (toggle) {
+            if (targetList.includes(spellName)) return; // already in list
+            targetList.push(spellName);
+            if (listMode == "Edit List") loadedSpellLists[selectedSpellList].push(getSpellByName(spellName));
+        } else {
+            const removedIndex = targetList.indexOf(spellName);
+            if (removedIndex == -1) return; // not in list, so don't remove it
+            if (listMode == "Edit List" && i == 0) loadedSpellLists[selectedSpellList].splice(removedIndex,1);
+            targetList.splice(removedIndex,1);
+        }
+        targetList = spellLists[selectedSpellList].prepared;
     }
+    updatePreparedFraction();
     if (save) saveKey("spellLists");
 }
 function setViewMode(val) {
