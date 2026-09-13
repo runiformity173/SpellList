@@ -1,6 +1,47 @@
 // "Closest match" spell when results are empty?
 let SEARCH_QUERY = "";
+let sortingReversed = false;
+let sortingMode = "level";
 
+function compareSpells(a,b) {
+    if (sortingMode == "level") {
+        if (a.level != b.level) return a.level-b.level;
+    } else if (sortingMode == "name") {
+        if (a.name != b.name) return a.name.localeCompare(b.name);
+    } else if (sortingMode == "school") {
+        if (a.school != b.school) return schoolDict[a.school].localeCompare(schoolDict[b.school]);
+    } else if (sortingMode == "source") {
+        if (a.source != b.source) return a.source.localeCompare(b.source);
+    }
+    if (a.level != b.level) return a.level-b.level;
+    if (a.name != b.name) return a.name.localeCompare(b.name);
+    if (a.source != b.source) return a.source.localeCompare(b.source);
+    return 0;
+}
+function reversableCompareSpells(a,b) {
+    return (sortingReversed ? -1 : 1) * compareSpells(a,b);
+}
+function moveSortingArrow() {
+    const headers = document.getElementById("spellListHeaders").firstElementChild;
+    for (const el of headers.children) {
+        el.innerHTML = el.innerHTML.replaceAll(/[↑↓]/g,"");
+    }
+    let arrow = sortingReversed ? "↑" : "↓";
+    if (sortingMode == "name") headers.children[0].innerHTML += arrow;
+    if (sortingMode == "level") headers.children[1].innerHTML += arrow;
+    if (sortingMode == "school") headers.children[2].innerHTML += arrow;
+    if (sortingMode == "source") headers.children[3].innerHTML += arrow;
+}
+function clickSortMode(mode) {
+    if (mode == sortingMode) sortingReversed = !sortingReversed;
+    else {
+        sortingReversed = false;
+        sortingMode = mode;
+    }
+    moveSortingArrow();
+    loadSpells(formatFilters(selectedFilters));
+    saveKey("sortData");
+}
 function getNameForSpell(spell,concise=true) {
     const withoutSource = spell.name.replaceAll(" ","-").toLowerCase();
     if (concise && spell === getSpellByName(withoutSource)) {
@@ -18,6 +59,7 @@ function loadSpells(filters) {
     } else if (selectedSpellList) {
         spellSet = new Set(spellLists[selectedSpellList].prepared);
     }
+    selectedObjectArray.sort(reversableCompareSpells);
     for (const spell of selectedObjectArray) {
         if (!matchesFilter(spell, filters)) continue;
         const el = document.createElement("div");

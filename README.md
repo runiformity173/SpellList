@@ -31,7 +31,6 @@ If on main page, dropdown for spell list select. If in spell lists, there's also
 - Change details for always prepared
 
 # TODO
-- Sorting
 - Add spell preparation mode & indicators
 - Add list of sources to spells
 - Always prepared?
