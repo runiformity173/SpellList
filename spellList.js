@@ -45,7 +45,9 @@ function updatePreparedFraction() {
         return;
     }
     if (spellLists[selectedSpellList].maxPrepared <= 0) return;
-    document.getElementById("spellPreparedSpan").innerHTML = spellLists[selectedSpellList].prepared.length + "/" + spellLists[selectedSpellList].maxPrepared;
+    document.getElementById("spellPreparedSpan").innerHTML = (spellLists[selectedSpellList].prepared.length - 
+        spellLists[selectedSpellList].alwaysPrepared.length) + 
+        "/" + spellLists[selectedSpellList].maxPrepared;
 }
 function setSpellInList(spellName,toggle,save=true) {
     let targetList;
@@ -95,6 +97,7 @@ function selectSpellList(newListName) {
             name: newName,
             spells: [],
             prepared: [],
+            alwaysPrepared: [],
             maxPrepared: 0,
         }
         saveKey("spellLists");
