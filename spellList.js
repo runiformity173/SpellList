@@ -20,6 +20,20 @@ function selectAllCheckbox(val) {
         }
     }
 }
+function reevaluateSelectAllChecked() {
+    let anyChecked = false;
+    let anyUnchecked = false;
+    for (const el of document.querySelectorAll("#spellOptions .list-group-item input[type=checkbox]")) {
+        if (el.closest(".list-group-item").style.display == "none") continue;
+        if (el.checked) anyChecked = true;
+        else anyUnchecked = true;
+    }
+    if (anyChecked && !anyUnchecked) {
+        document.getElementById("selectAllCheckbox").checked = true;
+    } else if (anyUnchecked) {
+        document.getElementById("selectAllCheckbox").checked = false;
+    }
+}
 function setSpellInList(spellName,toggle,save=true) {
     let targetList;
     if (listMode == "View List") {

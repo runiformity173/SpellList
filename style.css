@@ -150,3 +150,6 @@ div:has(> .spell-checkbox) {
     right: 0.5em;
     text-align: right;
 }
+.list-group-flush>.list-group-item:last-child { /* bootstrap is annoying, gotta override */
+    border-bottom-width: 1px !important;
+}

@@ -90,6 +90,7 @@ function loadSpells(filters) {
         if (!matchesSearch(spell, SEARCH_QUERY)) {el.style.display = "none";}
         document.getElementById("spellOptions").appendChild(el);
     }
+    reevaluateSelectAllChecked();
     document.getElementById("selectAllCheckbox").style.display = selectedSpellList ? "" : "none";
 }
 function matchesFilter(spell, filter) {
@@ -149,6 +150,7 @@ function filterSpells(returnVal=false) {
             el.style.display = matchesSearch(spell, SEARCH_QUERY) ? "" : "none";
         }
     }
+    if (!returnVal) reevaluateSelectAllChecked();
     return result;
 }
 function load() {
