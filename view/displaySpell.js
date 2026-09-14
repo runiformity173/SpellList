@@ -242,10 +242,11 @@ function getSpellHTML(spell) {
     }
     const school = schoolDict[spell.school];
     const levelAndSchool = spell.level == 0 ? school + " Cantrip" : `Level ${spell.level} ${school}`;
+    spell.classes.sort();
     return parseStrings(`
     <div class="spell-source" title="${sourceDict[spell.source]}"><h3>${spell.source}</h3></div>
     <h3>${spell.name}</h3>
-    <p><em>${levelAndSchool}</em></p>
+    <p><em>${levelAndSchool} (${spell.classes.map(capitalize).join(", ")})</em></p>
     <dl>
         <dt><strong>Casting Time:</strong></dt>
         <dd>${parseTime(spell.time,spell.meta?.ritual)}<br></dd>
