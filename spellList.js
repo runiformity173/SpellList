@@ -9,10 +9,21 @@ function selectAllCheckbox(val) {
             }
             saveKey("spellLists");
         }
-    } else {
-        if (confirm(`Are you sure you want to ${val ? "prepare" : "unprepare"} all of these spells?`)) {
+    } else if (listMode == "Edit Always Prepared") {
+        if (confirm(`Are you sure you want to set all of these spells to ${val ? "always prepared" : "not always prepared"}?`)) {
             for (const spell of filterSpells(returnVal=true)) {
                 const spellName = getNameForSpell(spell,concise=false);
+                setSpellInList(spellName,val,save=false);
+                document.getElementById("checkbox-"+spellName).checked = val;
+            }
+            saveKey("spellLists");
+        }
+    } else {
+        if (confirm(`Are you sure you want to ${val ? "prepare" : "unprepare"} all of these spells?`)) {
+            const alwaysPrepared = selectedSpellList ? new Set(spellLists[selectedSpellList].alwaysPrepared) : new Set();
+            for (const spell of filterSpells(returnVal=true)) {
+                const spellName = getNameForSpell(spell,concise=false);
+                if (!val && alwaysPrepared.has(spellName)) continue;
                 setSpellInList(spellName,val,save=false);
                 document.getElementById("checkbox-"+spellName).checked = val;
             }
@@ -36,38 +47,57 @@ function reevaluateSelectAllChecked() {
 }
 function updatePreparedFraction() {
     if (!selectedSpellList) return;
+    const spellList = spellLists[selectedSpellList];
     if (listMode == "Edit List") {
         document.getElementById("spellPreparedSpan").innerHTML = `<input
             id="spellPreparedInput"
-            value="${spellLists[selectedSpellList].maxPrepared}"
+            value="${spellList.maxPrepared}"
             onchange="spellLists[selectedSpellList].maxPrepared = Number(this.value);saveKey('spellLists');"
         >`
         return;
     }
-    if (spellLists[selectedSpellList].maxPrepared <= 0) return;
-    document.getElementById("spellPreparedSpan").innerHTML = (spellLists[selectedSpellList].prepared.length - 
-        spellLists[selectedSpellList].alwaysPrepared.length) + 
-        "/" + spellLists[selectedSpellList].maxPrepared;
+    if (spellList.maxPrepared <= 0) return;
+    document.getElementById("spellPreparedSpan").innerHTML = (spellList.prepared.length - 
+        spellList.alwaysPrepared.length) + 
+        "/" + spellList.maxPrepared;
 }
 function setSpellInList(spellName,toggle,save=true) {
-    let targetList;
+    const spellList = spellLists[selectedSpellList];
     if (listMode == "View List") {
-        targetList = spellLists[selectedSpellList].prepared;
-    } else if (listMode == "Edit List") {
-        targetList = spellLists[selectedSpellList].spells;
-    }
-    for (let i = 0; i <= +(listMode == "Edit List" && !toggle); i++) {
+        const targetList = spellList.prepared;
         if (toggle) {
-            if (targetList.includes(spellName)) return; // already in list
+            if (targetList.includes(spellName)) return; // already prepared
             targetList.push(spellName);
-            if (listMode == "Edit List") loadedSpellLists[selectedSpellList].push(getSpellByName(spellName));
         } else {
             const removedIndex = targetList.indexOf(spellName);
-            if (removedIndex == -1) return; // not in list, so don't remove it
-            if (listMode == "Edit List" && i == 0) loadedSpellLists[selectedSpellList].splice(removedIndex,1);
+            if (removedIndex == -1) return; // not prepared, so don't remove it
             targetList.splice(removedIndex,1);
         }
-        targetList = spellLists[selectedSpellList].prepared;
+    } else if (listMode == "Edit List") {
+        if (toggle) {
+            if (spellList.spells.includes(spellName)) return; // already in list
+            spellList.spells.push(spellName);
+            loadedSpellLists[selectedSpellList].push(getSpellByName(spellName));
+        } else {
+            const removedIndex = spellList.spells.indexOf(spellName);
+            if (removedIndex == -1) return; // not in list, so don't remove it
+            loadedSpellLists[selectedSpellList].splice(removedIndex,1);
+            spellList.spells.splice(removedIndex,1);
+            for (const key of ["prepared","alwaysPrepared"]) {
+                const index = spellList[key].indexOf(spellName);
+                if (index != -1) spellList[key].splice(index,1);
+            }
+        }
+    } else if (listMode == "Edit Always Prepared") {
+        if (toggle) {
+            if (spellList.alwaysPrepared.includes(spellName)) return;
+            if (!spellList.prepared.includes(spellName)) return;
+            spellList.alwaysPrepared.push(spellName);
+        } else {
+            const removedIndex = spellList.alwaysPrepared.indexOf(spellName);
+            if (removedIndex == -1) return; // not always prepared, don't remove it
+            spellList.alwaysPrepared.splice(removedIndex,1);
+        }
     }
     updatePreparedFraction();
     if (save) saveKey("spellLists");

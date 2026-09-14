@@ -37,6 +37,7 @@ function loadAllKeys() {
     if (!(selectedSpellList in spellLists)) {
         selectedSpellList = undefined;
         document.getElementById("listAddOptionEl").disabled = true;
+        document.getElementById("listAlwaysPreparedOptionEl").disabled = true;
     } else {
         const spellObjectReferences = [];
         const spellSet = new Set(spellLists[selectedSpellList].spells);
@@ -50,6 +51,11 @@ function loadAllKeys() {
         }
         loadedSpellLists[selectedSpellList] = spellObjectReferences;
         spellLists[selectedSpellList].spells = orderedSpells;
+        for (const spellName of spellLists[selectedSpellList].alwaysPrepared) {
+            if (!spellLists[selectedSpellList].prepared.includes(spellName)) {
+                spellLists[selectedSpellList].prepared.push(spellName);
+            }
+        }
         document.getElementById("spellListSelect").value = spellLists[selectedSpellList].name;
     }
     const loadedSortingData = loadKey("sortData");
