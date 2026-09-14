@@ -38,7 +38,7 @@ body {
         transition: transform 0.05s linear;
     }
     &:has(input[type=checkbox]:not(:checked)) {
-        cursor: move;
+        cursor: default;
         background-color: #000000 !important;
         .row {
             filter: brightness(0.5);
