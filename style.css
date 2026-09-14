@@ -37,6 +37,13 @@ body {
     .row {
         transition: transform 0.05s linear;
     }
+    &:has(input[type=checkbox]:not(:checked)) {
+        cursor: move;
+        background-color: #000000 !important;
+        .row {
+            filter: brightness(0.5);
+        }
+    }
 }
 .input-group {
     & input, & input::placeholder {
