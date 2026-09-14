@@ -179,4 +179,5 @@ div:has(> .spell-checkbox) {
 }
 input[type=checkbox]:disabled {
     filter: sepia(2) brightness(70%) saturate(300%) hue-rotate(180deg);
+    cursor: default;
 }
