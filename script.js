@@ -52,10 +52,17 @@ function getNameForSpell(spell,concise=true) {
 const spellLinkNames = {};
 function loadSpells(filters) {
     document.getElementById("spellOptions").innerHTML = "";
-    let selectedObjectArray = Array.from(selectedSpellList && listMode == "View List" ? loadedSpellLists[selectedSpellList] : spells);
+    let selectedObjectArray;
+    if (selectedSpellList && listMode == "View List") selectedObjectArray = Array.from(loadedSpellLists[selectedSpellList]);
+    else if (selectedSpellList && listMode == "Edit Always Prepared") {
+        const preparedSet = new Set(spellLists[selectedSpellList].prepared);
+        selectedObjectArray = Array.from(loadedSpellLists[selectedSpellList].filter(spell => preparedSet.has(getNameForSpell(spell,concise=false))));
+    } else selectedObjectArray = Array.from(spells);
     let spellSet; // spells that start checked
     if (selectedSpellList && listMode == "Edit List") {
         spellSet = new Set(spellLists[selectedSpellList].spells);
+    } else if (selectedSpellList && listMode == "Edit Always Prepared") {
+        spellSet = new Set(spellLists[selectedSpellList].alwaysPrepared);
     } else if (selectedSpellList) {
         spellSet = new Set(spellLists[selectedSpellList].prepared);
     }
@@ -83,7 +90,8 @@ function loadSpells(filters) {
             nel.className = "position-absolute top-0";
             nel.style.width = "10%";
             nel.style.marginTop = "0.5em";
-            nel.innerHTML = `<input type="checkbox" class="cursor-pointer spell-checkbox" onclick="setSpellInList('${spellName}',this.checked)" id="checkbox-${spellName}">`;
+            const disabled = listMode == "View List" && spellLists[selectedSpellList].alwaysPrepared.includes(spellName);
+            nel.innerHTML = `<input type="checkbox" class="cursor-pointer spell-checkbox" onclick="setSpellInList('${spellName}',this.checked)" id="checkbox-${spellName}"${disabled ? " disabled" : ""}>`;
             nel.firstElementChild.checked = spellSet.has(spellName);
             el.appendChild(nel);
         }

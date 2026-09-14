@@ -37,6 +37,13 @@ body {
     .row {
         transition: transform 0.05s linear;
     }
+    &:has(input[type=checkbox]:not(:checked)) {
+        cursor: move;
+        background-color: #000000 !important;
+        .row {
+            filter: brightness(0.5);
+        }
+    }
 }
 .input-group {
     & input, & input::placeholder {
@@ -169,4 +176,7 @@ div:has(> .spell-checkbox) {
     border-radius: 3px;
     width:2em;
     text-align: center;
+}
+input[type=checkbox]:disabled {
+    filter: sepia(2) brightness(70%) saturate(300%) hue-rotate(180deg);
 }
