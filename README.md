@@ -32,6 +32,5 @@ If on main page, dropdown for spell list select. If in spell lists, there's also
 
 # TODO
 - Add list of classes to spells
-- Always prepared?
 - Delete lists
 - Did you mean? When searching and no results show up.
