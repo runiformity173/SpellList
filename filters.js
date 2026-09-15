@@ -1,11 +1,7 @@
 const filterOptions = [
     {
         name: "Source",
-        options: {
-            "XPHB": "XPHB",
-            "TCE": "TCE",
-            "XGE": "XGE",
-        }
+        options: Object.fromEntries(Object.keys(sourceDict).map(o=>[o,o]))
     },
     {
         name: "Level",
