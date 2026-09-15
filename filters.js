@@ -183,15 +183,11 @@ const filterOptions = [
     {
         name: "Range",
         options: {
+            "self":"Self",
+            "touch":"Touch",
             "point":"Point",
-            "cone":"Cone",
-            "line":"Line",
-            "emanation":"Emanation",
-            "radius":"Radius",
-            "sphere":"Sphere",
+            "area":"Self (Area)",
             "special":"Special",
-            "hemisphere":"Hemisphere",
-            "cube":"Cube",
         }
     }
 ];

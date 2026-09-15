@@ -112,7 +112,10 @@ function matchesFilter(spell, filter) {
         if (filter.field == "time") {
             matches = spell[filter.field].map(o=>o.unit).includes(filter.value);
         } else if (filter.field == "range") {
-            matches = spell[filter.field].type == filter.value;
+            matches = spell[filter.field].type == filter.value || spell[filter.field].distance?.type == filter.value;
+            if (filter.value == "area") matches = !["special","point"].includes(spell[filter.field].type);
+            else if (["self","touch"].includes(spell[filter.field].distance?.type)) matches = spell[filter.field].distance?.type == filter.value;
+            else if (filter.value == "point") matches = spell[filter.field].type == "point";
         } else if (filter.field == "duration") {
             matches = spell[filter.field].map(o=>(o.type == "timed" ? o.duration.type : o.type)).includes(filter.value);
         } else if (filter.field == "special") {
