@@ -244,6 +244,16 @@ function formatFilters(filters) {
     return final;
 }
 
+function clearFilters() {
+    for (const key in selectedFilters) {
+        selectedFilters[key] = [];
+    }
+    saveKey("selectedFilters");
+    loadSpells(formatFilters(selectedFilters));
+    filterSpells();
+    loadFilters();
+}
+
 function loadFilters() {
     const filterModal = document.getElementById("filterModal");
     const bsFilterModal = new bootstrap.Modal(filterModal);
