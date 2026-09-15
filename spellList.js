@@ -56,7 +56,10 @@ function updatePreparedFraction() {
         >`
         return;
     }
-    if (spellList.maxPrepared <= 0) return;
+    if (spellList.maxPrepared <= 0) {
+        document.getElementById("spellPreparedSpan").innerHTML = "";
+        return;
+    }
     document.getElementById("spellPreparedSpan").innerHTML = (spellList.prepared.length - 
         spellList.alwaysPrepared.length) + 
         "/" + spellList.maxPrepared;
