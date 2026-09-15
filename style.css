@@ -91,6 +91,7 @@ body {
 }
 input[type='search']::-webkit-search-cancel-button {
   filter: grayscale(1) brightness(500%);
+  cursor: pointer;
 }
 .cursor-pointer {
     cursor: pointer;
