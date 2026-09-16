@@ -28,7 +28,7 @@ function getSpellByName(name,list=spells) {
         let bestDist = Infinity;
         for (const spell of list) {
             if (spell.reprintedAs) continue;
-            let dist = stringDistance(spellName, spell.name.toLowerCase())
+            let dist = stringDistance(spellName, spell.name.toLowerCase().slice(0,spellName.length));
             if (dist < bestDist) {
                 bestDist = dist;
                 best = spell;
