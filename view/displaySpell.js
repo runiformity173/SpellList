@@ -12,11 +12,11 @@ const schoolDict = {
     "T": "Transmutation",
 }
 var stringDistance=function(a,b){var c,d,e,f,g,h,k,l,m,n=a.length,o=b.length,p={insert:function(){return 0.1},delete:function(){return 1},replace:function(){return 1}};if(0==n||0==o){for(e=0;n;)e+=p.delete(a[--n]);for(;o;)e+=p.insert(b[--o]);return e}for(m=[],m[0]=0,d=1;d<=o;++d)m[d]=m[d-1]+p.insert(b[d-1]);for(c=1;c<=n;++c)for(k=m[0],m[0]+=p.delete(a[c-1]),d=1;d<=o;++d)l=m[d],a[c-1]==b[d-1]?m[d]=k:(f=m[d-1]+p.insert(b[d-1]),g=m[d]+p.delete(a[c-1]),h=k+p.replace(a[c-1],b[d-1]),m[d]=f<g?f:g<h?g:h),k=l;return e=m[o],e};
-function getSpellByName(name) {
+function getSpellByName(name,list=spells) {
     const spellName = name.split("--")[0].toLowerCase().replaceAll("-"," ");
-    if (name.includes("--")) {
+    if (name.includes("--") && list==spells) {
         const spellSource = name.split("--")[1].toLowerCase();
-        for (const spell of spells) {
+        for (const spell of list) {
             if (spell.name.toLowerCase() == spellName && spellSource == spell.source.toLowerCase()) {
                 return spell;
             }
@@ -26,9 +26,9 @@ function getSpellByName(name) {
     } else {
         let best;
         let bestDist = Infinity;
-        for (const spell of spells) {
+        for (const spell of list) {
             if (spell.reprintedAs) continue;
-            let dist = stringDistance(spellName, spell.name.toLowerCase())
+            let dist = stringDistance(spellName, spell.name.toLowerCase().slice(0,spellName.length));
             if (dist < bestDist) {
                 bestDist = dist;
                 best = spell;
