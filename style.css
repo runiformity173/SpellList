@@ -161,7 +161,6 @@ div:has(> .spell-checkbox) {
     right: 0.5em;
     text-align: right;
 }
-/* bootstrap is annoying, gotta override */
 .list-group-flush .list-group-item {
     border-right: 0;
     border-left: 0;
