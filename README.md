@@ -32,4 +32,3 @@ If on main page, dropdown for spell list select. If in spell lists, there's also
 
 # TODO
 - Delete lists
-- Did you mean? When searching and no results show up.
