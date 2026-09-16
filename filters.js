@@ -254,9 +254,9 @@ function clearFilters() {
     loadFilters();
 }
 
+const bsFilterModal = new bootstrap.Modal(filterModal);
 function loadFilters() {
     const filterModal = document.getElementById("filterModal");
-    const bsFilterModal = new bootstrap.Modal(filterModal);
     const modalBody = filterModal.querySelector(".modal-body");
     document.getElementById("spellFiltersContainer").innerHTML = "";
     let beganAdvancedFilters = false;
@@ -286,6 +286,12 @@ function loadFilters() {
         pill.addEventListener("click", function() { // construct and display filters modal
             filterModal.querySelector(".modal-title").innerHTML = filter.name + " Filters";
             modalBody.innerHTML = "";
+            const clearButton = document.createElement("button");
+            clearButton.type = "button";
+            clearButton.className = "btn btn-outline-light position-absolute top-0 end-0 border-top-0";
+            clearButton.innerHTML = `Clear`;
+            modalBody.appendChild(clearButton);
+            modalBody.appendChild(document.createElement("br"));
             for (const i in filter.options) {
                 let state = selected.includes(i) ? "yes" : selected.includes("!" + i) ? "no" : "maybe";
                 const innerPill = document.createElement("span");
@@ -313,17 +319,6 @@ function loadFilters() {
                 });
                 modalBody.appendChild(innerPill);
             }
-            const clearButton = document.createElement("button");
-            clearButton.type = "button";
-            clearButton.className = "close-button";
-            clearButton.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M2.146 2.146a.5.5 0 0 1 .708 0L8 7.293l5.146-5.147a.5.5 0 0 1
-                        .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8
-                        8.707l-5.146 5.147a.5.5 0 1 1-.708-.708L7.293 8
-                        2.146 2.854a.5.5 0 0 1 0-.708z"></path>
-                </svg>`;
-            modalBody.appendChild(clearButton);
             clearButton.addEventListener("click",function() {
                 selectedFilters[filter.name] = [];
                 saveKey("selectedFilters");
