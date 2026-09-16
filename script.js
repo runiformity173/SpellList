@@ -149,8 +149,8 @@ function matchesSearch(spell, search) {
     return false;
 }
 function filterSpells(returnVal=false) {
-    let result;
-    if (returnVal) result = [];
+    let result = []; // used for matching spells if returnVal else all loaded spells matching filters
+    let foundAny;
     for (const spell of spells) {
         const el = document.getElementById((spell.name + " " + spell.source) || "");
         if (!el) continue;
@@ -159,10 +159,18 @@ function filterSpells(returnVal=false) {
                 result.push(spell);
             }
         } else {
-            el.style.display = matchesSearch(spell, SEARCH_QUERY) ? "" : "none";
+            result.push(spell);
+            const matches = matchesSearch(spell, SEARCH_QUERY);
+            el.style.display = matches ? "" : "none";
+            if (matches) foundAny = true;
         }
     }
-    if (!returnVal) reevaluateSelectAllChecked();
+    if (!returnVal) {
+        reevaluateSelectAllChecked();
+        if (!foundAny) {
+            console.log(getSpellByName(SEARCH_QUERY,list=result).name);
+        }
+    }
     return result;
 }
 function load() {
