@@ -166,9 +166,15 @@ function filterSpells(returnVal=false) {
         }
     }
     if (!returnVal) {
+        document.getElementById("didYouMean").style.display = "none";
         reevaluateSelectAllChecked();
         if (!foundAny) {
-            console.log(getSpellByName(SEARCH_QUERY,list=result).name);
+            const closestSpell = getSpellByName(SEARCH_QUERY,list=result);
+            const el = document.getElementById(closestSpell.name + " " + closestSpell.source);
+            if (el) {
+                document.getElementById("didYouMean").style.display = "";
+                el.style.display = "";
+            }
         }
     }
     return result;
