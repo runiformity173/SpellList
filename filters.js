@@ -281,6 +281,7 @@ function loadFilters() {
         } else {
             label += ": ...";
         }
+        pill.id = "filter-"+filter.name;
         pill.innerHTML = label;
         pill.addEventListener("click", function() { // construct and display filters modal
             filterModal.querySelector(".modal-title").innerHTML = filter.name + " Filters";
@@ -291,19 +292,16 @@ function loadFilters() {
                 innerPill.className = `badge rounded-pill ${{yes: "text-bg-primary", no: "text-bg-danger", maybe: "text-bg-secondary"}[state]} cursor-pointer`
                 innerPill.innerHTML = filter.options[i];
                 innerPill.addEventListener("click",function() { // clicking on modal's filter pill to toggle it
-                    if (state == "maybe") {
-                        state = "yes";
+                    if (innerPill.classList.contains("text-bg-secondary")) {
                         innerPill.classList.remove("text-bg-secondary");
                         innerPill.classList.add("text-bg-primary");
                         selectedFilters[filter.name].push(i);
-                    } else if (state == "yes") {
-                        state = "no";
+                    } else if (innerPill.classList.contains("text-bg-primary")) {
                         innerPill.classList.remove("text-bg-primary");
                         innerPill.classList.add("text-bg-danger");
                         selectedFilters[filter.name].splice(selectedFilters[filter.name].indexOf(i),1);
                         selectedFilters[filter.name].push("!" + i);
                     } else {
-                        state = "maybe";
                         innerPill.classList.remove("text-bg-danger");
                         innerPill.classList.add("text-bg-secondary");
                         selectedFilters[filter.name].splice(selectedFilters[filter.name].indexOf("!" + i),1);
@@ -315,6 +313,29 @@ function loadFilters() {
                 });
                 modalBody.appendChild(innerPill);
             }
+            const clearButton = document.createElement("button");
+            clearButton.type = "button";
+            clearButton.className = "close-button";
+            clearButton.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M2.146 2.146a.5.5 0 0 1 .708 0L8 7.293l5.146-5.147a.5.5 0 0 1
+                        .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8
+                        8.707l-5.146 5.147a.5.5 0 1 1-.708-.708L7.293 8
+                        2.146 2.854a.5.5 0 0 1 0-.708z"></path>
+                </svg>`;
+            modalBody.appendChild(clearButton);
+            clearButton.addEventListener("click",function() {
+                selectedFilters[filter.name] = [];
+                saveKey("selectedFilters");
+                loadSpells(formatFilters(selectedFilters));
+                filterSpells();
+                loadFilters();
+                for (const el of modalBody.querySelectorAll(".badge.rounded-pill")) {
+                    el.classList.remove("text-bg-primary");
+                    el.classList.remove("text-bg-danger");
+                    el.classList.add("text-bg-secondary");
+                }
+            })
             bsFilterModal.show();
         })
         document.getElementById("spellFiltersContainer").appendChild(pill);
