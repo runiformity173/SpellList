@@ -244,9 +244,19 @@ function formatFilters(filters) {
     return final;
 }
 
+function clearFilters() {
+    for (const key in selectedFilters) {
+        selectedFilters[key] = [];
+    }
+    saveKey("selectedFilters");
+    loadSpells(formatFilters(selectedFilters));
+    filterSpells();
+    loadFilters();
+}
+
+const bsFilterModal = new bootstrap.Modal(filterModal);
 function loadFilters() {
     const filterModal = document.getElementById("filterModal");
-    const bsFilterModal = new bootstrap.Modal(filterModal);
     const modalBody = filterModal.querySelector(".modal-body");
     document.getElementById("spellFiltersContainer").innerHTML = "";
     let beganAdvancedFilters = false;
@@ -271,29 +281,33 @@ function loadFilters() {
         } else {
             label += ": ...";
         }
+        pill.id = "filter-"+filter.name;
         pill.innerHTML = label;
         pill.addEventListener("click", function() { // construct and display filters modal
             filterModal.querySelector(".modal-title").innerHTML = filter.name + " Filters";
             modalBody.innerHTML = "";
+            const clearButton = document.createElement("button");
+            clearButton.type = "button";
+            clearButton.className = "btn btn-outline-light position-absolute top-0 end-0 border-top-0";
+            clearButton.innerHTML = `Clear`;
+            modalBody.appendChild(clearButton);
+            modalBody.appendChild(document.createElement("br"));
             for (const i in filter.options) {
                 let state = selected.includes(i) ? "yes" : selected.includes("!" + i) ? "no" : "maybe";
                 const innerPill = document.createElement("span");
                 innerPill.className = `badge rounded-pill ${{yes: "text-bg-primary", no: "text-bg-danger", maybe: "text-bg-secondary"}[state]} cursor-pointer`
                 innerPill.innerHTML = filter.options[i];
                 innerPill.addEventListener("click",function() { // clicking on modal's filter pill to toggle it
-                    if (state == "maybe") {
-                        state = "yes";
+                    if (innerPill.classList.contains("text-bg-secondary")) {
                         innerPill.classList.remove("text-bg-secondary");
                         innerPill.classList.add("text-bg-primary");
                         selectedFilters[filter.name].push(i);
-                    } else if (state == "yes") {
-                        state = "no";
+                    } else if (innerPill.classList.contains("text-bg-primary")) {
                         innerPill.classList.remove("text-bg-primary");
                         innerPill.classList.add("text-bg-danger");
                         selectedFilters[filter.name].splice(selectedFilters[filter.name].indexOf(i),1);
                         selectedFilters[filter.name].push("!" + i);
                     } else {
-                        state = "maybe";
                         innerPill.classList.remove("text-bg-danger");
                         innerPill.classList.add("text-bg-secondary");
                         selectedFilters[filter.name].splice(selectedFilters[filter.name].indexOf("!" + i),1);
@@ -305,6 +319,18 @@ function loadFilters() {
                 });
                 modalBody.appendChild(innerPill);
             }
+            clearButton.addEventListener("click",function() {
+                selectedFilters[filter.name] = [];
+                saveKey("selectedFilters");
+                loadSpells(formatFilters(selectedFilters));
+                filterSpells();
+                loadFilters();
+                for (const el of modalBody.querySelectorAll(".badge.rounded-pill")) {
+                    el.classList.remove("text-bg-primary");
+                    el.classList.remove("text-bg-danger");
+                    el.classList.add("text-bg-secondary");
+                }
+            })
             bsFilterModal.show();
         })
         document.getElementById("spellFiltersContainer").appendChild(pill);
