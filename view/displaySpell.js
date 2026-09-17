@@ -128,6 +128,9 @@ function loadTable(table) {
                 if (text?.width) {
                     finalBody += `<td colspan="${table.colStyles.length}">${text}</td>`;
                     break;
+                } else if (text?.roll) {
+                    finalBody += `<td class="${table.colStyles[i]}">${text.roll.min}–${text.roll.max}</td>`;
+                    break;
                 }
                 finalBody += `<td class="${table.colStyles[i]}">${text}</td>`;
                 break;
