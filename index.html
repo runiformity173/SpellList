@@ -82,7 +82,7 @@
             </div>
 
             <!-- Spell list -->
-            <div class="border rounded overflow-auto flex-grow-1 position-relative overflow-hidden d-flex flex-column" style="height: 600px;" id="spellListContainer">
+            <div class="border rounded flex-grow-1 position-relative overflow-hidden d-flex flex-column" style="height: 600px;" id="spellListContainer">
               <div class="list-group-item bg-dark text-light" id="spellListHeaders">
                 <div class="row align-items-center g-2 text-secondary">
                   <div class="col-5 fw-semibold cursor-pointer" onclick="clickSortMode('name')">Name</div>
@@ -97,7 +97,7 @@
                   </div>
                 </div>
               </div>
-              <div class="list-group list-group-flush overflow-auto">
+              <div class="list-group list-group-flush overflow-y-auto overflow-x-hidden">
                 <div id="didYouMean" style="display: none;border-bottom: 1px white solid;">No matches found, displaying closest result:</div>
                 <div id="spellOptions">
 
