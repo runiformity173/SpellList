@@ -1,25 +1,41 @@
 window.addEventListener("keydown",function (e) {
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    const isModifierPressed = isMac ? event.metaKey : event.ctrlKey;
     if (e.key == "ArrowLeft") {
-        if (navigatePrevious()) e.preventDefault();
+        let navigateMethod = navigatePrevious;
+        if (isModifierPressed) navigateMethod = navigateFirst;
+        if (navigateMethod()) e.preventDefault();
     } else if (e.key == "ArrowRight") {
-        if (navigateNext()) e.preventDefault();
+        let navigateMethod = navigateNext;
+        if (isModifierPressed) navigateMethod = navigateLast;
+        if (navigateMethod()) e.preventDefault();
     }
 })
 function navigatePrevious() {
-    if (window.location.hash.length < 2) return;
-    const current = getSpellByName(window.location.hash.slice(1));
-    const el = document.getElementById(current.name + " " + current.source);
+    const el = document.querySelector(".selected-spell-item");
     if (el?.previousElementSibling) {
         el.previousElementSibling.click();
         return true;
     }
 }
 function navigateNext() {
-    if (window.location.hash.length < 2) return;
-    const current = getSpellByName(decodeURIComponent(window.location.hash.slice(1)));
-    const el = document.getElementById(current.name + " " + current.source);
+    const el = document.querySelector(".selected-spell-item");
     if (el?.nextElementSibling) {
         el.nextElementSibling.click();
+        return true;
+    }
+}
+function navigateFirst() {
+    const el = document.querySelector(".selected-spell-item")?.parentElement?.firstElementChild;
+    if (el && el != document.querySelector(".selected-spell-item")) {
+        el.click();
+        return true;
+    }
+}
+function navigateLast() {
+    const el = document.querySelector(".selected-spell-item")?.parentElement?.lastElementChild;
+    if (el && el != document.querySelector(".selected-spell-item")) {
+        el.click();
         return true;
     }
 }

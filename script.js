@@ -83,7 +83,7 @@ function loadSpells(filters) {
         el.addEventListener("click",function () {
             window.location.replace("#"+getNameForSpell(spell));
             document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
-            document.querySelector(".selected-spell-item").classList.remove("selected-spell-item");
+            document.querySelector(".selected-spell-item")?.classList?.remove?.("selected-spell-item");
             el.classList.add("selected-spell-item");
         });
         if (selectedSpellList) {
@@ -184,23 +184,21 @@ function filterSpells(returnVal=false) {
 function load() {
     loadAllKeys();
     loadSpells(formatFilters(selectedFilters));
-    const spellName = decodeURIComponent(location.hash.slice(1));
-    if (spellName) {
-        const spell = getSpellByName(spellName);
-        document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
-        const target = document.getElementById(spell.name + " " + spell.source);
-        if (target) {
-            let scrollTarget = target;
-            for (let i = 0; i < 2 && scrollTarget.previousElementSibling; i++) {
-                scrollTarget = scrollTarget.previousElementSibling;
-            }
-            scrollTarget.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-            target.classList.add("emphasize-flash-animation");
-            target.classList.add("selected-spell-item");
+    const spellName = decodeURIComponent(location.hash?.slice?.(1));
+    const spell = getSpellByName(spellName);
+    let target = document.getElementById(spell.name + " " + spell.source);
+    if (!target || spellName == "undefined") target = document.getElementById("spellOptions").firstElementChild;
+    target.click();
+    if (target) {
+        let scrollTarget = target;
+        for (let i = 0; i < 2 && scrollTarget.previousElementSibling; i++) {
+            scrollTarget = scrollTarget.previousElementSibling;
         }
+        scrollTarget.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+        target.classList.add("emphasize-flash-animation");
     }
     loadFilters();
     updatePreparedFraction();
