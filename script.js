@@ -70,6 +70,7 @@ function loadSpells(filters) {
     for (const spell of selectedObjectArray) {
         if (!matchesFilter(spell, filters)) continue;
         const el = document.createElement("div");
+        el.tabIndex = 0;
         el.className = "list-group-item bg-dark text-light spell-item";
         el.id = spell.name + " " + spell.source;
         el.innerHTML = `
@@ -85,6 +86,7 @@ function loadSpells(filters) {
             document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
             document.querySelector(".selected-spell-item")?.classList?.remove?.("selected-spell-item");
             el.classList.add("selected-spell-item");
+            el.focus({ focusVisible: false });
         });
         if (selectedSpellList) {
             const spellName = getNameForSpell(spell,concise=false);
@@ -93,9 +95,14 @@ function loadSpells(filters) {
             nel.style.width = "10%";
             nel.style.marginTop = "0.5em";
             const disabled = listMode == "View List" && spellLists[selectedSpellList].alwaysPrepared.includes(spellName);
-            nel.innerHTML = `<input type="checkbox" class="cursor-pointer spell-checkbox" onclick="setSpellInList('${spellName}',this.checked)" id="checkbox-${spellName}"${disabled ? " disabled" : ""}>`;
+            nel.innerHTML = `<input tabindex="-1" type="checkbox" class="cursor-pointer spell-checkbox" onclick="setSpellInList('${spellName}',this.checked)" id="checkbox-${spellName}"${disabled ? " disabled" : ""}>`;
             nel.firstElementChild.checked = spellSet.has(spellName);
             el.appendChild(nel);
+            el.addEventListener("keypress",function (e) {
+                if (e.key == "Enter") {
+                    nel.firstElementChild.click();
+                }
+            });
         }
         if (!matchesSearch(spell, SEARCH_QUERY)) {el.style.display = "none";}
         document.getElementById("spellOptions").appendChild(el);

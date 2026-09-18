@@ -27,14 +27,14 @@ function navigateNext() {
 }
 function navigateFirst() {
     const el = document.querySelector(".selected-spell-item")?.parentElement?.firstElementChild;
-    if (el && el != document.querySelector(".selected-spell-item")) {
+    if (el) {
         el.click();
         return true;
     }
 }
 function navigateLast() {
     const el = document.querySelector(".selected-spell-item")?.parentElement?.lastElementChild;
-    if (el && el != document.querySelector(".selected-spell-item")) {
+    if (el) {
         el.click();
         return true;
     }
