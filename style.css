@@ -43,6 +43,9 @@ body {
     &:has(input[type=checkbox]:not(:checked)) {
         cursor: default;
         background-color: #000000 !important;
+        &.selected-spell-item {
+            background-color: #000046 !important;
+        }
         .row {
             filter: brightness(0.5);
         }
@@ -138,7 +141,7 @@ input:focus + #magnifyingGlass {
         filter: "";
     }
     to {
-        filter: brightness(2) sepia(10) hue-rotate(185deg) saturate(2);
+        filter: brightness(2);
     }
 }
 .emphasize-flash-animation {
@@ -188,4 +191,7 @@ div:has(> .spell-checkbox) {
 input[type=checkbox]:disabled {
     filter: sepia(2) brightness(70%) saturate(300%) hue-rotate(180deg);
     cursor: default;
+}
+.selected-spell-item {
+    background-color: darkblue !important;
 }

@@ -83,6 +83,8 @@ function loadSpells(filters) {
         el.addEventListener("click",function () {
             window.location.replace("#"+getNameForSpell(spell));
             document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
+            document.querySelector(".selected-spell-item").classList.remove("selected-spell-item");
+            el.classList.add("selected-spell-item");
         });
         if (selectedSpellList) {
             const spellName = getNameForSpell(spell,concise=false);
@@ -197,6 +199,7 @@ function load() {
                 block: 'start'
             });
             target.classList.add("emphasize-flash-animation");
+            target.classList.add("selected-spell-item");
         }
     }
     loadFilters();
