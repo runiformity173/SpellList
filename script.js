@@ -177,7 +177,7 @@ function filterSpells(returnVal=false) {
     if (!returnVal) {
         document.getElementById("didYouMean").style.display = "none";
         reevaluateSelectAllChecked();
-        if (!foundAny) {
+        if (!foundAny && result.length) {
             const closestSpell = getSpellByName(SEARCH_QUERY,list=result);
             const el = document.getElementById(closestSpell.name + " " + closestSpell.source);
             if (el) {
@@ -195,7 +195,7 @@ function load() {
     const spell = getSpellByName(spellName);
     let target = document.getElementById(spell.name + " " + spell.source);
     if (!target || spellName == "undefined") target = document.getElementById("spellOptions").firstElementChild;
-    target.click();
+    target?.click?.();
     if (target) {
         let scrollTarget = target;
         for (let i = 0; i < 2 && scrollTarget.previousElementSibling; i++) {
