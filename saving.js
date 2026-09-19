@@ -63,3 +63,21 @@ function loadAllKeys() {
     if (loadedSortingData?.sortingReversed) sortingReversed = loadedSortingData.sortingReversed;
     moveSortingArrow();
 }
+function exportSpellList() {
+    if (!selectedSpellList) return;
+    const text = btoa(JSON.stringify(spellLists[selectedSpellList]));
+    navigator.clipboard.writeText(text);
+}
+function importSpellList() {
+    let imported = prompt("Paste spell data:");
+    try {
+        imported = JSON.parse(atob(imported));
+        if (!(imported && imported.prepared && imported.spells)) return;
+        if (!confirm(`Replace spell list with ${imported.spells.length} spells, ${imported.prepared.length} prepared?`)) return;
+        const name = spellLists[selectedSpellList].name;
+        spellLists[selectedSpellList] = imported;
+        imported.name = name;
+        saveKey("spellLists");
+        window.location.reload();
+    } catch {}
+}
