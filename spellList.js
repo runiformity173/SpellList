@@ -106,8 +106,16 @@ function setSpellInList(spellName,toggle,save=true) {
     if (save) saveKey("spellLists");
 }
 function setViewMode(val) {
-    listMode = val;
-    loadSpells(formatFilters(selectedFilters));
+    if (val == "Export List") {
+        document.getElementById("viewModeSelector").value = listMode;
+        exportSpellList();
+    } else if (val == "Import into List") {
+        document.getElementById("viewModeSelector").value = listMode;
+        importSpellList();
+    } else {
+        listMode = val;
+        loadSpells(formatFilters(selectedFilters));
+    }
 }
 function selectSpellList(newListName) {
     if (newListName == "All Spells") {
