@@ -1,11 +1,11 @@
 window.addEventListener("keydown",function (e) {
     const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
     const isModifierPressed = isMac ? event.metaKey : event.ctrlKey;
-    if (e.key == "ArrowLeft") {
+    if (e.key == "ArrowLeft" || e.key == "ArrowUp") {
         let navigateMethod = navigatePrevious;
         if (isModifierPressed) navigateMethod = navigateFirst;
         if (navigateMethod()) e.preventDefault();
-    } else if (e.key == "ArrowRight") {
+    } else if (e.key == "ArrowRight" || e.key == "ArrowDown") {
         let navigateMethod = navigateNext;
         if (isModifierPressed) navigateMethod = navigateLast;
         if (navigateMethod()) e.preventDefault();
