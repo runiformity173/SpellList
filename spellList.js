@@ -116,7 +116,8 @@ function setViewMode(val) {
         if (prompt(`Type "${spellLists[selectedSpellList].name}" to confirm`) == spellLists[selectedSpellList].name) {
             delete spellLists[selectedSpellList];
             saveKey("spellLists");
-            window.location.reload();
+            const url = window.location.href;
+            window.location.replace(url.split("?")[0] + window.location.hash);
         } else {
             document.getElementById("viewModeSelector").value = listMode;
         }
