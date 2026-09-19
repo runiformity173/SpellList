@@ -117,6 +117,8 @@ function setViewMode(val) {
             delete spellLists[selectedSpellList];
             saveKey("spellLists");
             window.location.reload();
+        } else {
+            document.getElementById("viewModeSelector").value = listMode;
         }
     } else {
         listMode = val;
