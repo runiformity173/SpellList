@@ -112,6 +112,12 @@ function setViewMode(val) {
     } else if (val == "Import into List") {
         document.getElementById("viewModeSelector").value = listMode;
         importSpellList();
+    } else if (val == "Delete List") {
+        if (prompt(`Type "${spellLists[selectedSpellList].name}" to confirm`) == spellLists[selectedSpellList].name) {
+            delete spellLists[selectedSpellList];
+            saveKey("spellLists");
+            window.location.reload();
+        }
     } else {
         listMode = val;
         loadSpells(formatFilters(selectedFilters));

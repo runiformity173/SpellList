@@ -38,6 +38,9 @@ function loadAllKeys() {
         selectedSpellList = undefined;
         document.getElementById("listAddOptionEl").disabled = true;
         document.getElementById("listAlwaysPreparedOptionEl").disabled = true;
+        document.getElementById("listImportOptionEl").disabled = true;
+        document.getElementById("listExportOptionEl").disabled = true;
+        document.getElementById("listDeleteOptionEl").disabled = true;
     } else {
         const spellObjectReferences = [];
         const spellSet = new Set(spellLists[selectedSpellList].spells);
