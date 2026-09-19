@@ -66,7 +66,9 @@ function loadAllKeys() {
 function exportSpellList() {
     if (!selectedSpellList) return;
     const text = btoa(JSON.stringify(spellLists[selectedSpellList]));
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(text).then(()=>{
+        alert("Data copied to clipboard");
+    });
 }
 function importSpellList() {
     let imported = prompt("Paste spell data:");
