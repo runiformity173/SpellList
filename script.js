@@ -84,6 +84,19 @@ function loadSpells(filters) {
         el.addEventListener("click",function () {
             window.location.replace("#"+getNameForSpell(spell));
             document.querySelector("#spellOutput .spell-display").innerHTML = getSpellHTML(spell);
+            const popoutButton = document.createElement("button");
+            popoutButton.className = "btn popout-button";
+            popoutButton.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            `;
+            popoutButton.addEventListener("click",function (e) {
+                let newUrl = window.location.href;
+                window.open("view/#"+newUrl.split("#")[1], "_blank");
+            });
+            document.querySelector("#spellOutput .spell-display").appendChild(popoutButton);
             document.querySelector(".selected-spell-item")?.classList?.remove?.("selected-spell-item");
             el.classList.add("selected-spell-item");
             el.focus({ focusVisible: false });
