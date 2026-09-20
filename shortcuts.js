@@ -13,27 +13,41 @@ window.addEventListener("keydown",function (e) {
 })
 function navigatePrevious() {
     const el = document.querySelector(".selected-spell-item");
-    if (el?.previousElementSibling) {
-        el.previousElementSibling.click();
+    let prev = el?.previousElementSibling;
+    while (prev && prev.style.display == "none") {
+        prev = prev.previousElementSibling;
+    }
+    if (prev) {
+        prev.click();
         return true;
     }
 }
 function navigateNext() {
     const el = document.querySelector(".selected-spell-item");
-    if (el?.nextElementSibling) {
-        el.nextElementSibling.click();
+    let next = el?.nextElementSibling;
+    while (next && next.style.display == "none") {
+        next = next.nextElementSibling;
+    }
+    if (next) {
+        next.click();
         return true;
     }
 }
 function navigateFirst() {
-    const el = document.querySelector(".selected-spell-item")?.parentElement?.firstElementChild;
+    let el = document.querySelector(".selected-spell-item")?.parentElement?.firstElementChild;
+    while (el && el.style.display == "none") {
+        el = el.nextElementSibling;
+    }
     if (el) {
         el.click();
         return true;
     }
 }
 function navigateLast() {
-    const el = document.querySelector(".selected-spell-item")?.parentElement?.lastElementChild;
+    let el = document.querySelector(".selected-spell-item")?.parentElement?.lastElementChild;
+    while (el && el.style.display == "none") {
+        el = el.previousElementSibling;
+    }
     if (el) {
         el.click();
         return true;
