@@ -108,7 +108,7 @@ function loadSpells(filters) {
             nel.style.width = "10%";
             nel.style.marginTop = "0.5em";
             const disabled = listMode == "View List" && spellLists[selectedSpellList].alwaysPrepared.includes(spellName);
-            nel.innerHTML = `<input tabindex="-1" type="checkbox" class="cursor-pointer spell-checkbox" onclick="setSpellInList('${spellName}',this.checked)" id="checkbox-${spellName}"${disabled ? " disabled" : ""}>`;
+            nel.innerHTML = `<input tabindex="-1" type="checkbox" class="cursor-pointer spell-checkbox" onclick="setSpellInList('${spellName.replaceAll("'","\\'")}',this.checked)" id="checkbox-${spellName}"${disabled ? " disabled" : ""}>`;
             nel.firstElementChild.checked = spellSet.has(spellName);
             el.appendChild(nel);
             el.addEventListener("keypress",function (e) {
