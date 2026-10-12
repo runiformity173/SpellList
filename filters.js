@@ -163,8 +163,8 @@ const filterOptions = [
     {
         name: "Area",
         options: {
-            "MT":"Single Target",
-            "ST":"Multiple Targets",
+            "ST":"Single Target",
+            "MT":"Multiple Targets",
             "S":"Sphere",
             "L":"Line",
             "N":"Cone",
